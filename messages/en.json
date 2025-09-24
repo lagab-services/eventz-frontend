@@ -1,5 +1,29 @@
 {
   "HomePage": {
     "title": "Hello world!"
+  },
+  "auth": {
+    "login_title": "Login",
+    "login_description": "Enter your email and password to login to your account.",
+    "forgot_password": "Forgot Password",
+    "forgot_password_description": "Enter your registered email and\n we will send you a link to reset your password.",
+    "forgot_password_action": "Send Reset Link",
+    "reset_password": "Reset Password",
+    "reset_password_description": "Enter a new password to reset your password.",
+    "reset_password_action": "Reset Password",
+    "register_title": "Register",
+    "register_description": "Create a new account by filling out the form below.",
+    "register_action": "Register",
+    "register_fullname": "Full Name",
+    "email": "Email",
+    "email_placeholder": "Enter your email...",
+    "password": "Password",
+    "new_password": "New Password",
+    "confirm_password": "Confirm Password",
+    "ask_forgot_password": "Forgot your password?",
+    "signin_with_email": "Sign In with Email",
+    "or_continue_with": "Or continue with",
+    "no_account": "Don't have an account?",
+    "sign_up": "Sign up"
   }
 }
