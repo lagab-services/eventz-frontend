@@ -4,6 +4,8 @@ import "../globals.css";
 import {NextIntlClientProvider} from "next-intl";
 import {Toaster} from "@/components/ui/sonner";
 import NextAuthProvider from "@/providers/NextAuthProvider";
+import {ThemeProvider} from "@/components/layout/ThemeProvider";
+import {NuqsAdapter} from "nuqs/adapters/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,12 +28,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning={true}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <NextIntlClientProvider>
-            <NextAuthProvider>{children}</NextAuthProvider>
+            <NextAuthProvider>
+                <ThemeProvider
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+                disableTransitionOnChange
+                >
+                    <NuqsAdapter>{children}</NuqsAdapter>
+                </ThemeProvider>
+            </NextAuthProvider>
         </NextIntlClientProvider>
         <Toaster />
       </body>

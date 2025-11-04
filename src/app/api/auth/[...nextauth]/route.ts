@@ -62,11 +62,11 @@ export const authOptions: NextAuthOptions = {
                         user.token = {token: data.token.token};
                         return true;
                     } else {
-                        console.error('Error registering user in the backend:', data)
+                        console.error('NotFound registering user in the backend:', data)
                         return false;
                     }
                 } catch (error) {
-                    console.error('Error during session callback', error);
+                    console.error('NotFound during session callback', error);
                     return false;
                 }
             }*/

@@ -1,0 +1,542 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "email": "john.doe@example.com",
+      "firstName": "John",
+      "lastName": "Doe",
+      "role": "ORGANIZER",
+      "locale": "fr-FR",
+      "is_active": true,
+      "is_email_verified": true,
+      "created_at": "2024-01-15T10:00:00Z"
+    },
+    {
+      "id": 2,
+      "email": "jane.smith@example.com",
+      "firstName": "Jane",
+      "lastName": "Smith",
+      "role": "USER",
+      "locale": "en-US",
+      "is_active": true,
+      "is_email_verified": true,
+      "created_at": "2024-02-20T14:30:00Z"
+    }
+  ],
+  "organizations": [
+    {
+      "id": "org-123",
+      "name": "TechEvents Inc",
+      "slug": "techevents-inc",
+      "email": "contact@techevents.com",
+      "logo": "https://example.com/logos/techevents.png",
+      "metadata": {}
+    },
+    {
+      "id": "org-456",
+      "name": "Music Festival Co",
+      "slug": "music-festival-co",
+      "email": "info@musicfest.com",
+      "logo": "https://example.com/logos/musicfest.png",
+      "metadata": {}
+    }
+  ],
+  "events": [
+    {
+      "id": 1,
+      "name": "Tech Conference 2025",
+      "description": "Une conférence annuelle sur les dernières technologies et innovations",
+      "summary": "Conférence tech avec des experts internationaux",
+      "surtitle": "Annual Event",
+      "subtitle": "Innovation & Technology",
+      "startDate": "2025-06-15T09:00:00Z",
+      "endDate": "2025-06-17T18:00:00Z",
+      "registrationStart": "2025-03-01T00:00:00Z",
+      "registrationEnd": "2025-06-10T23:59:59Z",
+      "status": "PUBLISHED",
+      "type": "CONFERENCE",
+      "imageUrl": "https://example.com/events/tech-conf.jpg",
+      "website": "https://techconf2025.com",
+      "maxAttendees": 500,
+      "isPublic": true,
+      "isFree": false,
+      "currency": "EUR",
+      "createdAt": "2024-12-01T10:00:00Z",
+      "updatedAt": "2025-01-10T15:30:00Z",
+      "organizerId": 1,
+      "organizerName": "John Doe",
+      "organizationId": "org-123",
+      "organizationName": "TechEvents Inc",
+      "averageRating": 4.5,
+      "reviewCount": 42,
+      "addressId": 1,
+      "ticketCategories": [
+        {
+          "id": 1,
+          "name": "Billets Standard",
+          "description": "Accès général à l'événement",
+          "displayOrder": 1,
+          "isActive": true,
+          "isCollapsed": true,
+          "ticketTypes": [
+            {
+              "id": 1,
+              "name": "Early Bird",
+              "price": 49,
+              "description": "Profitez du tarif préférentiel",
+              "quantityAvailable": 25,
+              "maxQuantity": 5,
+              "benefits": [
+                "Accès complet à l'événement",
+                "Badge personnalisé",
+                "Café & collations"
+              ],
+              "earlyBird": true
+            },
+            {
+              "id": 2,
+              "name": "Standard",
+              "price": 79,
+              "description": "Billet standard pour l'événement",
+              "quantityAvailable": 150,
+              "maxQuantity": 10,
+              "benefits": [
+                "Accès complet à l'événement",
+                "Badge personnalisé"
+              ]
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "name": "Billets Premium",
+          "description": "Expérience VIP avec avantages exclusifs",
+          "displayOrder": 2,
+          "isActive": true,
+          "isCollapsed": true,
+          "ticketTypes": [
+            {
+              "id": 3,
+              "name": "VIP",
+              "price": 199,
+              "description": "Accès VIP avec avantages exclusifs",
+              "quantityAvailable": 30,
+              "maxQuantity": 3,
+              "benefits": [
+                "Accès prioritaire",
+                "Zone VIP exclusive",
+                "Repas gastronomique inclus",
+                "Networking privé",
+                "Goodies premium"
+              ]
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "name": "Billets Groupe",
+          "description": "Tarifs avantageux pour les groupes",
+          "displayOrder": 3,
+          "isActive": true,
+          "isCollapsed": true,
+          "ticketTypes": [
+            {
+              "id": 4,
+              "name": "Pack Groupe (5 personnes)",
+              "price": 299,
+              "description": "Tarif groupe pour 5 participants",
+              "quantityAvailable": 10,
+              "maxQuantity": 2,
+              "benefits": [
+                "5 billets inclus",
+                "Économisez 20%",
+                "Table réservée",
+                "Badges personnalisés"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Summer Music Festival",
+      "description": "Le plus grand festival de musique de l'été avec des artistes internationaux",
+      "summary": "3 jours de musique non-stop",
+      "surtitle": "Festival 2025",
+      "subtitle": "Rock, Pop & Electronic",
+      "startDate": "2025-07-20T16:00:00Z",
+      "endDate": "2025-07-22T23:00:00Z",
+      "registrationStart": "2025-04-01T00:00:00Z",
+      "registrationEnd": "2025-07-15T23:59:59Z",
+      "status": "PUBLISHED",
+      "type": "FESTIVAL",
+      "imageUrl": "https://example.com/events/summer-fest.jpg",
+      "website": "https://summerfest2025.com",
+      "maxAttendees": 10000,
+      "isPublic": true,
+      "isFree": false,
+      "currency": "EUR",
+      "createdAt": "2024-11-15T10:00:00Z",
+      "updatedAt": "2025-01-05T12:00:00Z",
+      "organizerId": 2,
+      "organizerName": "Jane Smith",
+      "organizationId": "org-456",
+      "organizationName": "Music Festival Co",
+      "averageRating": 4.8,
+      "reviewCount": 156,
+      "addressId": 2
+    }
+  ],
+  "addresses": [
+    {
+      "id": 1,
+      "name": "Convention Center Paris",
+      "address1": "2 Place de la Porte de Versailles",
+      "address2": "",
+      "city": "Paris",
+      "state": "Île-de-France",
+      "country": "France",
+      "zipCode": "75015",
+      "longitude": 2.2869,
+      "latitude": 48.8327,
+      "isOnline": false,
+      "onlineUrl": null
+    },
+    {
+      "id": 2,
+      "name": "Outdoor Festival Grounds",
+      "address1": "Route des Festivals",
+      "address2": "Parc des Expositions",
+      "city": "Lyon",
+      "state": "Auvergne-Rhône-Alpes",
+      "country": "France",
+      "zipCode": "69007",
+      "longitude": 4.8357,
+      "latitude": 45.7640,
+      "isOnline": false,
+      "onlineUrl": null
+    }
+  ],
+  "ticketCategories": [
+    {
+      "id": 1,
+      "name": "Standard",
+      "description": "Billets standards",
+      "displayOrder": 1,
+      "isActive": true,
+      "isCollapsed": false,
+      "eventId": 1
+    },
+    {
+      "id": 2,
+      "name": "VIP",
+      "description": "Accès VIP avec avantages exclusifs",
+      "displayOrder": 2,
+      "isActive": true,
+      "isCollapsed": false,
+      "eventId": 1
+    },
+    {
+      "id": 3,
+      "name": "General Admission",
+      "description": "Entrée générale",
+      "displayOrder": 1,
+      "isActive": true,
+      "isCollapsed": false,
+      "eventId": 2
+    }
+  ],
+  "ticketTypes": [
+    {
+      "id": 1,
+      "name": "Early Bird",
+      "description": "Tarif préférentiel pour les inscriptions anticipées",
+      "price": 299.99,
+      "quantityAvailable": 100,
+      "quantitySold": 85,
+      "saleStart": "2025-03-01T00:00:00Z",
+      "saleEnd": "2025-04-30T23:59:59Z",
+      "minQuantity": 1,
+      "maxQuantity": 5,
+      "isActive": true,
+      "categoryId": 1,
+      "eventId": 1
+    },
+    {
+      "id": 2,
+      "name": "Standard Pass",
+      "description": "Accès complet à la conférence",
+      "price": 399.99,
+      "quantityAvailable": 300,
+      "quantitySold": 142,
+      "saleStart": "2025-05-01T00:00:00Z",
+      "saleEnd": "2025-06-10T23:59:59Z",
+      "minQuantity": 1,
+      "maxQuantity": 10,
+      "isActive": true,
+      "categoryId": 1,
+      "eventId": 1
+    },
+    {
+      "id": 3,
+      "name": "VIP Pass",
+      "description": "Accès VIP avec lounge et networking exclusif",
+      "price": 799.99,
+      "quantityAvailable": 50,
+      "quantitySold": 28,
+      "saleStart": "2025-03-01T00:00:00Z",
+      "saleEnd": "2025-06-10T23:59:59Z",
+      "minQuantity": 1,
+      "maxQuantity": 3,
+      "isActive": true,
+      "categoryId": 2,
+      "eventId": 1
+    },
+    {
+      "id": 4,
+      "name": "Festival Pass 3 Days",
+      "description": "Accès complet aux 3 jours du festival",
+      "price": 149.99,
+      "quantityAvailable": 5000,
+      "quantitySold": 3842,
+      "saleStart": "2025-04-01T00:00:00Z",
+      "saleEnd": "2025-07-15T23:59:59Z",
+      "minQuantity": 1,
+      "maxQuantity": 10,
+      "isActive": true,
+      "categoryId": 3,
+      "eventId": 2
+    }
+  ],
+  "orders": [
+    {
+      "orderId": 1,
+      "orderNumber": "CMD-123456",
+      "status": "PAID",
+      "totalAmount": 799.98,
+      "feesAmount": 39.99,
+      "createdAt": "2025-03-15T14:30:00Z",
+      "eventId": 1,
+      "userId": 2,
+      "expiresAt": null,
+      "notes": "Commande pour 2 personnes"
+    },
+    {
+      "orderId": 2,
+      "orderNumber": "CMD-789012",
+      "status": "PENDING",
+      "totalAmount": 449.97,
+      "feesAmount": 22.50,
+      "createdAt": "2025-10-10T10:15:00Z",
+      "eventId": 2,
+      "userId": 1,
+      "expiresAt": "2025-10-10T22:15:00Z",
+      "notes": ""
+    }
+  ],
+  "orderItems": [
+    {
+      "id": 1,
+      "orderId": 1,
+      "ticketTypeId": 1,
+      "ticketTypeName": "Early Bird",
+      "quantity": 2,
+      "unitPrice": 299.99,
+      "totalPrice": 599.98
+    },
+    {
+      "id": 2,
+      "orderId": 2,
+      "ticketTypeId": 4,
+      "ticketTypeName": "Festival Pass 3 Days",
+      "quantity": 3,
+      "unitPrice": 149.99,
+      "totalPrice": 449.97
+    }
+  ],
+  "attendees": [
+    {
+      "id": 1,
+      "firstName": "Alice",
+      "lastName": "Martin",
+      "email": "alice.martin@example.com",
+      "ticketNumber": "TKT-001-123456",
+      "ticketTypeId": 1,
+      "ticketTypeName": "Early Bird",
+      "orderId": 1,
+      "eventId": 1,
+      "checkInStatus": "CHECKED_IN",
+      "customFields": {}
+    },
+    {
+      "id": 2,
+      "firstName": "Bob",
+      "lastName": "Durant",
+      "email": "bob.durant@example.com",
+      "ticketNumber": "TKT-002-123456",
+      "ticketTypeId": 1,
+      "ticketTypeName": "Early Bird",
+      "orderId": 1,
+      "eventId": 1,
+      "checkInStatus": "NOT_CHECKED_IN",
+      "customFields": {}
+    }
+  ],
+  "discounts": [
+    {
+      "id": "DISC-001",
+      "type": "PERCENTAGE",
+      "code": "EARLY2025",
+      "amount_off": null,
+      "percent_off": 10,
+      "eventId": 1,
+      "ticket_type_ids": [1, 2],
+      "quantity_available": 50,
+      "quantity_sold": 12,
+      "start_date": "2025-03-01T00:00:00Z",
+      "end_date": "2025-03-31T23:59:59Z",
+      "end_date_relative": null,
+      "ticket_category_id": 1
+    },
+    {
+      "id": "DISC-002",
+      "type": "FIXED_AMOUNT",
+      "code": "FESTIVAL50",
+      "amount_off": 50,
+      "percent_off": null,
+      "eventId": 2,
+      "ticket_type_ids": [4],
+      "quantity_available": 100,
+      "quantity_sold": 45,
+      "start_date": "2025-04-01T00:00:00Z",
+      "end_date": "2025-05-31T23:59:59Z",
+      "end_date_relative": null,
+      "ticket_category_id": 3
+    }
+  ],
+  "customFields": [
+    {
+      "id": 1,
+      "fieldName": "company",
+      "fieldLabel": "Entreprise",
+      "fieldType": "TEXT",
+      "isRequired": false,
+      "fieldOptions": null,
+      "placeholder": "Nom de votre entreprise",
+      "displayOrder": 1,
+      "eventId": 1,
+      "ticketTypeId": null
+    },
+    {
+      "id": 2,
+      "fieldName": "dietary_requirements",
+      "fieldLabel": "Régime alimentaire",
+      "fieldType": "SELECT",
+      "isRequired": true,
+      "fieldOptions": "Aucun,Végétarien,Végétalien,Sans gluten,Halal",
+      "placeholder": "Sélectionnez votre régime",
+      "displayOrder": 2,
+      "eventId": 1,
+      "ticketTypeId": 3
+    }
+  ],
+  "organizationMembers": [
+    {
+      "id": 1,
+      "organizationId": "org-123",
+      "userId": 1,
+      "role": "OWNER"
+    },
+    {
+      "id": 2,
+      "organizationId": "org-456",
+      "userId": 2,
+      "role": "ADMIN"
+    }
+  ],
+  "apiKeys": [
+    {
+      "id": 1,
+      "name": "Production API Key",
+      "clientType": "WEB_CLIENT",
+      "clientSecret": "sk_live_xxxxxxxxxxxxx",
+      "createdAt": "2024-01-01T00:00:00Z",
+      "expiresAt": "2026-01-01T00:00:00Z",
+      "active": true,
+      "roles": ["USER", "ORGANIZER"]
+    }
+  ],
+  "cart": {
+    "items": [
+      {
+        "ticketTypeId": 1,
+        "ticketTypeName": "Early Bird",
+        "eventTitle": "Tech Conference 2025",
+        "eventId": 1,
+        "unitPrice": 299.99,
+        "quantity": 2,
+        "totalPrice": 599.98,
+        "availableQuantity": 15,
+        "isAvailable": true
+      },
+      {
+        "ticketTypeId": 3,
+        "ticketTypeName": "VIP Pass",
+        "eventTitle": "Tech Conference 2025",
+        "eventId": 1,
+        "unitPrice": 799.99,
+        "quantity": 1,
+        "totalPrice": 799.99,
+        "availableQuantity": 22,
+        "isAvailable": true
+      }
+    ],
+    "subtotal": 1399.97,
+    "fees": 69.99,
+    "discount": 139.99,
+    "total": 1329.97,
+    "totalItems": 3,
+    "updatedAt": "2025-10-10T14:30:45.123456",
+    "promoCode": "EARLY2025",
+    "isValid": true,
+    "warnings": [],
+    "errors": []
+  },
+  "cart-items": {
+    "items": [
+      {
+        "ticketTypeId": 1,
+        "ticketTypeName": "Early Bird",
+        "eventTitle": "Tech Conference 2025",
+        "eventId": 1,
+        "unitPrice": 299.99,
+        "quantity": 2,
+        "totalPrice": 599.98,
+        "availableQuantity": 15,
+        "isAvailable": true
+      },
+      {
+        "ticketTypeId": 3,
+        "ticketTypeName": "VIP Pass",
+        "eventTitle": "Tech Conference 2025",
+        "eventId": 1,
+        "unitPrice": 799.99,
+        "quantity": 1,
+        "totalPrice": 799.99,
+        "availableQuantity": 22,
+        "isAvailable": true
+      }
+    ],
+    "subtotal": 1399.97,
+    "fees": 69.99,
+    "discount": 139.99,
+    "total": 1329.97,
+    "totalItems": 3,
+    "updatedAt": "2025-10-10T14:30:45.123456",
+    "promoCode": "EARLY2025",
+    "isValid": true,
+    "warnings": [],
+    "errors": []
+  }
+}
