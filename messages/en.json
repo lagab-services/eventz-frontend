@@ -33,5 +33,146 @@
     "or_continue_with": "Or continue with",
     "no_account": "Don't have an account?",
     "sign_up": "Sign up"
+  },
+  "event": {
+    "recap": "Summary",
+    "selectedTickets": "{count, plural,=1 {# ticket selected} other {# tickets selected}}",
+    "total": "Total",
+    "goToCheckout": "Proceed to Checkout",
+    "lastTickets": "Last available tickets",
+    "maxAttendees": "Max {count} people",
+    "processing": "Processing..."
+  },
+  "ticket": {
+    "selectedTickets": "{count, plural,=1 {# selected} other {# selected}}",
+    "soldOut": "Sold Out",
+    "maxPerOrder": "Max {maxPerOrder} per order"
+  },
+  "cart": {
+    "add_success": "Tickets successfully added to cart",
+    "error_generic": "An error occurred",
+    "error_fetch": "Failed to fetch the cart",
+    "update_success": "Quantity updated",
+    "error_update": "Failed to update quantity",
+    "remove_success": "Item removed from cart",
+    "error_remove": "Failed to remove item",
+    "promo_applied": "Promo code applied",
+    "promo_invalid": "Invalid promo code",
+    "promo_removed": "Promo code removed",
+    "promo_remove_error": "Failed to remove promo code",
+    "cart_cleared": "Cart cleared",
+    "error_clear": "Failed to clear cart",
+    "checkout_error": "Please fix errors before proceeding"
+  },
+  "checkout": {
+    "attendee": {
+      "title": "Attendee Information",
+      "description": "Provide information for each attendee ({completed}/{total} {completed, plural,=1 {completed} other {completed}})",
+      "label": "Attendee {index}"
+    },
+    "fields": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email Address"
+    },
+    "placeholders": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "email@example.com"
+    },
+    "actions": {
+      "previous": "Previous",
+      "next": "Next",
+      "continue": "Continue",
+      "goToPayment": "Proceed to Payment"
+    },
+    "customerInfo": {
+      "title": "Buyer Information",
+      "description": "Enter your contact details to receive your tickets",
+      "fields": {
+        "firstName": {
+          "label": "First Name *",
+          "placeholder": "Your first name"
+        },
+        "lastName": {
+          "label": "Last Name *",
+          "placeholder": "Your last name"
+        },
+        "email": {
+          "label": "Email Address *",
+          "placeholder": "your@email.com"
+        },
+        "phone": {
+          "label": "Phone",
+          "placeholder": "06 12 34 56 78"
+        }
+      },
+      "buttons": {
+        "back": "Back",
+        "continue": "Continue"
+      }
+    },
+    "promoCode": {
+      "label": "Promo Code",
+      "placeholder": "Enter your code",
+      "applyButton": "Apply",
+      "errorRequired": "Please enter a promo code.",
+      "appliedTitle": "Promo code applied!",
+      "appliedDescription": "The code \"{code}\" has been successfully applied."
+    },
+    "orderSummary": {
+      "title": "Order Summary",
+      "emptyCart": "Your cart is empty",
+      "ticketCount": "{count, plural, =0 {0 ticket} =1 {1 ticket} other {# tickets}}",
+      "collapse": "Collapse",
+      "expand": "Expand",
+      "quantityPrice": "{quantity} × {price}€",
+      "price": "{amount}€",
+      "discountAmount": "-{amount}€",
+      "unavailable": "Unavailable",
+      "subtotal": "Subtotal",
+      "serviceFees": "Service Fees",
+      "discount": "Discount",
+      "total": "Total",
+      "taxIncluded": "VAT included",
+      "fixErrors": "⚠️ Please fix errors before proceeding",
+      "securePayment": "100% Secure Payment",
+      "emailDelivery": "Tickets sent via email",
+      "lastUpdated": "Updated at {time}"
+    },
+    "summary": {
+      "complete": "All attendees are filled in"
+    },
+    "recap": {
+      "title": "Order Summary",
+      "subtitle": "Review your information before finalizing your booking.",
+      "yes": "Yes",
+      "no": "No",
+      "attendees": {
+        "title": "Attendees ({count})",
+        "description": "Details of all attendees",
+        "participant": "attendee",
+        "info": "info"
+      },
+      "fields": {
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "email": "Email",
+        "additionalInfo": "Additional Information"
+      },
+      "customer": {
+        "title": "Customer Information",
+        "description": "Your contact details",
+        "edit": "Edit",
+        "fullName": "Full Name",
+        "email": "Email",
+        "phone": "Phone",
+        "newsletter": "Subscribed to Newsletter"
+      },
+      "buttons": {
+        "back": "Back",
+        "continueToPayment": "Proceed to Payment"
+      }
+    }
   }
 }

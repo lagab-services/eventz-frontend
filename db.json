@@ -55,7 +55,7 @@
       "registrationEnd": "2025-06-10T23:59:59Z",
       "status": "PUBLISHED",
       "type": "CONFERENCE",
-      "imageUrl": "https://example.com/events/tech-conf.jpg",
+      "imageUrl": "https://gallery.weezevent.com/574181/sites/newFile_8EbjwaN.jpeg",
       "website": "https://techconf2025.com",
       "maxAttendees": 500,
       "isPublic": true,
@@ -162,7 +162,7 @@
       "id": 2,
       "name": "Summer Music Festival",
       "description": "Le plus grand festival de musique de l'été avec des artistes internationaux",
-      "summary": "3 jours de musique non-stop",
+      "summary": "AFROFESTIVAL MALAGA 10TH EDITION ( OFFICIAL EVENT)\n\n♦\uFE0F♦\uFE0F GRATEFUL EDITION – 10TH ♦\uFE0F♦\uFE0F\nTHANK YOU FOR ALL THE YEARS AND ENJOY LA VIDA !\n➡ ROOMS :\n✔ ROOM 1 – KIZOMBA & SEMBA\n✔ ROOM 2 – URBANKIZ\n✔ ROOM 3 – KONPA & ZOUK RETRO & CABO LOVE…\n➡ SOCIAL :\nSOCIAL @ THE BEACH\n➡ SQUAD LIST – 10TH EDITION\n\uD83C\uDFA7 DJ’S :\n✔ DJ ADON\n✔ DJ LISA ROSE\n✔ DJ DANI FERNANDES\n✔ DJ SABURA\n✔ DJ MIRO KIKOLA\n✔ DJ NICE LIFE\n✔ DJ HUGO BOSS\n✔ DJ FRANK\n✔ DJ PARAISO\n✔ DJ NAO\n✔ DJ MTEE\n✔ DJ ONFIRE\n✔ DJ FAZE\n✔ DJ QDS\n✔ DJ TATI\n✔ DJ YOUSS\n✔ DJ DOS ANJOS\n✔ DJ SO SABI\n\uD83D\uDC83 TEACHERS \uD83D\uDD7A :\n✔ DINO DA CRUZ\n✔ FABRICO DO ZANGADO\n✔ JOJO & JENNY\n✔ LUKASZ & KAROLINA( VAMULA)\n✔ JESUS & ANNI\n✔ FRANS & SARAH\n✔ JAMAICA & CHRISTELLE\n✔ ESTEBAN & SANDRA\n✔ KALYPSO & ADE\n✔ ISSA\n✔ MIGUEL ALBINO\n✔ VANILDO OLIVEIRA\n\uD83C\uDFA5 TEAM MEDIA \uD83D\uDCF7 :\n✔ WILSON EBOT\n✔ ALFIL\n✔ POSOVISUAL\n✔ ALJANDRO SIEMPRE\n➡ MAIN HOTELS – CODE BOOKING : AFRO25\nMS AMARAGUA \uD83C\uDFE8\nhttps://www.amaragua.com/\nMS TROPICANA \uD83C\uDFE8\nhttps://www.hotelmstropicana.com/\n✅ Link of tickets\nhttps://my.weezevent.com/afrofestival-costa-del-sol…\n✅\uFE0F Group Afro\nhttps://www.facebook.com/groups/163016957451190/?ref=share_group_link\n➡ LINK FRAME – AFROFESTIVAL 10TH EDITION\nhttps://www.twibbonize.com/afro10edition",
       "surtitle": "Festival 2025",
       "subtitle": "Rock, Pop & Electronic",
       "startDate": "2025-07-20T16:00:00Z",
@@ -171,7 +171,7 @@
       "registrationEnd": "2025-07-15T23:59:59Z",
       "status": "PUBLISHED",
       "type": "FESTIVAL",
-      "imageUrl": "https://example.com/events/summer-fest.jpg",
+      "imageUrl": "https://scontent-cdg4-2.xx.fbcdn.net/v/t39.30808-6/558882384_1246924560811291_7684519920867412232_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=Mh_z8f__124Q7kNvwFY_yE6&_nc_oc=Adl9UBaUD2vnNq-YkQh1D03SWCRYWdKxndpJWHE4UFgvCNO5awIvWdymksokj_PRKbw&_nc_zt=23&_nc_ht=scontent-cdg4-2.xx&_nc_gid=QCCwr4QaZ3Srai6iHWk1Lg&oh=00_Afi7BLF1dFwbhb3HCTZWv9hbnBXfMgT6MfE2XR_6mjtG8Q&oe=69144E3E",
       "website": "https://summerfest2025.com",
       "maxAttendees": 10000,
       "isPublic": true,
@@ -185,7 +185,8 @@
       "organizationName": "Music Festival Co",
       "averageRating": 4.8,
       "reviewCount": 156,
-      "addressId": 2
+      "addressId": 2,
+      "ticketCategories":[]
     }
   ],
   "addresses": [

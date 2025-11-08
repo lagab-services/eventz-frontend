@@ -33,5 +33,146 @@
     "or_continue_with": "Ou continuer avec",
     "no_account": "Vous n'avez pas de compte ?",
     "sign_up": "S'inscrire"
+  },
+  "event": {
+    "recap": "Récapitulatif",
+    "selectedTickets": "{count, plural,=1 { # billet sélectionné} other {# billets sélectionnés}}",
+    "total": "Total",
+    "goToCheckout": "Continuer vers le paiement",
+    "lastTickets": "Dernières places disponibles",
+    "maxAttendees": "{count} personnes max",
+    "processing": "Traitement..."
+  },
+  "ticket": {
+    "selectedTickets": "{count, plural,=1 { # sélectionné} other {# sélectionnés}}",
+    "soldOut": "Sold Out",
+    "maxPerOrder": "Max {maxPerOrder} par commande"
+  },
+  "cart": {
+    "add_success": "Tickets ajoutés au panier avec succès",
+    "error_generic": "Une erreur est survenue",
+    "error_fetch": "Impossible de récupérer le panier",
+    "update_success": "Quantité mise à jour",
+    "error_update": "Échec de la mise à jour de la quantité",
+    "remove_success": "Article retiré du panier",
+    "error_remove": "Échec de la suppression de l'article",
+    "promo_applied": "Code promo appliqué",
+    "promo_invalid": "Code promo invalide",
+    "promo_removed": "Code promo retiré",
+    "promo_remove_error": "Impossible de retirer le code promo",
+    "cart_cleared": "Panier vidé",
+    "error_clear": "Impossible de vider le panier",
+    "checkout_error": "Veuillez corriger les erreurs avant de continuer"
+  },
+  "checkout": {
+    "attendee": {
+      "title": "Informations des participants",
+      "description": "Renseignez les informations pour chaque participant ({completed}/{total} {completed, plural,=1 {complété} other {complétés}})",
+      "label": "Participant {index}"
+    },
+    "fields": {
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "email": "Adresse email"
+    },
+    "placeholders": {
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "email": "email@exemple.com"
+    },
+    "actions": {
+      "previous": "Précédent",
+      "next": "Suivant",
+      "continue": "Continuer",
+      "goToPayment": "Continuer vers le paiement"
+    },
+    "customerInfo": {
+      "title": "Informations Acheteur",
+      "description": "Renseignez vos coordonnées pour recevoir vos billets",
+      "fields": {
+        "firstName": {
+          "label": "Prénom *",
+          "placeholder": "Votre prénom"
+        },
+        "lastName": {
+          "label": "Nom *",
+          "placeholder": "Votre nom"
+        },
+        "email": {
+          "label": "Adresse email *",
+          "placeholder": "votre@email.com"
+        },
+        "phone": {
+          "label": "Téléphone",
+          "placeholder": "06 12 34 56 78"
+        }
+      },
+      "buttons": {
+        "back": "Retour",
+        "continue": "Continuer"
+      }
+    },
+    "promoCode": {
+      "label": "Code Promo",
+      "placeholder": "Entrez votre code",
+      "applyButton": "Appliquer",
+      "errorRequired": "Veuillez saisir un code promo.",
+      "appliedTitle": "Code promo appliqué !",
+      "appliedDescription": "Le code \"{code}\" a été appliqué avec succès."
+    },
+    "orderSummary": {
+      "title": "Récapitulatif",
+      "emptyCart": "Votre panier est vide",
+      "ticketCount": "{count, plural, =0 {0 billet} =1 {1 billet} other {# billets}}",
+      "collapse": "Réduire",
+      "expand": "Développer",
+      "quantityPrice": "{quantity} × {price}€",
+      "price": "{amount}€",
+      "discountAmount": "-{amount}€",
+      "unavailable": "Indisponible",
+      "subtotal": "Sous-total",
+      "serviceFees": "Frais de service",
+      "discount": "Réduction",
+      "total": "Total",
+      "taxIncluded": "TVA incluse",
+      "fixErrors": "⚠️ Veuillez corriger les erreurs avant de continuer",
+      "securePayment": "Paiement 100% sécurisé",
+      "emailDelivery": "Billets envoyés par email",
+      "lastUpdated": "Mis à jour à {time}"
+    },
+    "summary": {
+      "complete": "Tous les participants sont renseignés"
+    },
+    "recap": {
+      "title": "Récapitulatif de votre commande",
+      "subtitle": "Vérifiez vos informations avant de finaliser votre réservation.",
+      "yes": "Oui",
+      "no": "Non",
+      "attendees": {
+        "title": "Participants ({count})",
+        "description": "Détails de tous les participants",
+        "participant": "participant",
+        "info": "info"
+      },
+      "fields": {
+        "firstName": "Prénom",
+        "lastName": "Nom",
+        "email": "Email",
+        "additionalInfo": "Informations complémentaires"
+      },
+      "customer": {
+        "title": "Informations du client",
+        "description": "Vos coordonnées de contact",
+        "edit": "Modifier",
+        "fullName": "Nom complet",
+        "email": "Email",
+        "phone": "Téléphone",
+        "newsletter": "Inscrit à la newsletter"
+      },
+      "buttons": {
+        "back": "Retour",
+        "continueToPayment": "Continuer vers le paiement"
+      }
+    }
   }
 }
