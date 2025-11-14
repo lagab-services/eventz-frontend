@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "motion/react";
+import React from "react";
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Tabs as ShadcnTabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -12,42 +12,37 @@ type Tab = {
 };
 
 export const CustomTabs = ({
-                         tabs: propTabs,
-                         containerClassName,
-                         activeTabClassName,
-                         tabClassName,
-                         contentClassName,
-                         defaultValue,
-                     }: {
+                               tabs: propTabs,
+                               containerClassName,
+                               activeTabClassName,
+                               tabClassName,
+                               contentClassName,
+                               defaultValue,
+                               value,
+                               onValueChange,
+                           }: {
     tabs: Tab[];
     containerClassName?: string;
     activeTabClassName?: string;
     tabClassName?: string;
     contentClassName?: string;
     defaultValue?: string;
+    value?: string;
+    onValueChange?: (value: string) => void;
 }) => {
-    const [active, setActive] = useState<Tab>(
-        propTabs.find(tab => tab.value === defaultValue) || propTabs[0]
-    );
 
-    const moveSelectedTabToTop = (selectedTab: Tab) => {
-        const newTabs = [...propTabs];
-        const idx = newTabs.findIndex(tab => tab.value === selectedTab.value);
-        const removed = newTabs.splice(idx, 1);
-        newTabs.unshift(removed[0]);
-        setActive(selectedTab);
-    };
+    const isControlled = value !== undefined && onValueChange !== undefined;
+    const currentActiveValue = isControlled ? value : defaultValue || propTabs[0].value;
 
     return (
         <ShadcnTabs
-            defaultValue={defaultValue || propTabs[0].value}
-            className="w-full"
-            onValueChange={(value) => {
-                const selectedTab = propTabs.find(tab => tab.value === value);
-                if (selectedTab) {
-                    moveSelectedTabToTop(selectedTab);
+            value={currentActiveValue}
+            onValueChange={(newValue) => {
+                if (onValueChange) {
+                    onValueChange(newValue);
                 }
             }}
+            className="w-full"
         >
             <TabsList
                 className={cn(
@@ -67,7 +62,7 @@ export const CustomTabs = ({
                             transformStyle: "preserve-3d",
                         }}
                     >
-                        {active.value === tab.value && (
+                        {currentActiveValue === tab.value && (
                             <motion.div
                                 layoutId="clickedbutton"
                                 transition={{ type: "spring", bounce: 0.3, duration: 0.6 }}
@@ -79,8 +74,8 @@ export const CustomTabs = ({
                         )}
 
                         <span className="relative block text-black dark:text-white z-10">
-              {tab.title}
-            </span>
+                            {tab.title}
+                        </span>
                     </TabsTrigger>
                 ))}
             </TabsList>

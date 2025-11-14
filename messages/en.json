@@ -2,6 +2,10 @@
   "HomePage": {
     "title": "Hello world!"
   },
+  "localeSwitcher": {
+    "label": "Langue",
+    "locale": "{locale, select, de {Deutsch} en {English} fr {French} other {Unknown}}"
+  },
   "auth": {
     "login_title": "Login",
     "login_success": "You are successfully logged in",
