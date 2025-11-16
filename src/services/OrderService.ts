@@ -1,0 +1,92 @@
+import {apiClient, RestApi} from "@/lib/httpClient";
+import {getServerSession, Session} from "next-auth";
+import {authOptions} from "@/app/api/auth/[...nextauth]/route";
+import {CheckoutResponse, OrderRequest, TrackOrderRequest} from "@/types/checkout";
+import {Page} from "@/types/page";
+import {OrderResponse} from "@/types/order";
+
+export class OrderService {
+    private readonly api: RestApi;
+
+    constructor(token?: string) {
+        this.api = apiClient;
+        if (token) {
+            this.api.setAuth(token);
+        }
+    }
+
+    static async fromSession(session?: Session | null) {
+        session ??= await getServerSession(authOptions);
+        const token = session?.user.accessToken;
+        return new OrderService(token);
+    }
+
+    // ➤ POST /api/orders/checkout
+    async createCheckoutSession(order: OrderRequest): Promise<CheckoutResponse> {
+        const res = await this.api.post("/api/orders/checkout", order);
+        return res.data;
+    }
+
+    // ➤ GET /api/orders/{orderId}
+    async getOrder(orderId: number): Promise<OrderResponse> {
+        const res = await this.api.get(`/api/orders/${orderId}`);
+        return res.data;
+    }
+
+    // ➤ GET /api/orders/user/{userId}?page=0&size=20
+    async getUserOrders(
+        userId: number,
+        page: number = 0,
+        size: number = 20
+    ): Promise<Page<OrderResponse>> {
+        const res = await this.api.get(`/api/orders/user/${userId}`, {
+            params: {page, size}
+        });
+        return res.data;
+    }
+
+    // ➤ GET /api/orders/event/{eventId}?page=0&size=20
+    async getEventOrders(
+        eventId: number,
+        page: number = 0,
+        size: number = 20
+    ): Promise<Page<OrderResponse>> {
+        const res = await this.api.get(`/api/orders/event/${eventId}`, {
+            params: {page, size}
+        });
+        return res.data;
+    }
+
+    // ➤ PUT /api/orders/{orderId}/cancel?reason=xxx
+    async cancelOrder(
+        orderId: number,
+        reason?: string
+    ): Promise<OrderResponse> {
+        const res = await this.api.put(`/api/orders/${orderId}/cancel`, null, {
+            params: reason ? {reason} : {}
+        });
+        return res.data;
+    }
+
+    // -------------------------
+    // Guest Order Endpoints
+    // -------------------------
+
+    async trackGuestOrder(
+        request: TrackOrderRequest
+    ): Promise<OrderResponse> {
+        const res = await this.api.post("/api/guest/orders/track", request);
+        return res.data;
+    }
+
+    async downloadTicket(
+        orderNumber: string,
+        attendeeId: number
+    ): Promise<Blob> {
+        const res = await this.api.get(`/api/guest/orders/${orderNumber}/attendees/${attendeeId}/ticket`, {
+            responseType: "blob", // nécessaire pour un PDF
+        });
+        return res.data;
+    }
+
+}

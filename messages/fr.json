@@ -39,13 +39,24 @@
     "sign_up": "S'inscrire"
   },
   "event": {
+    "eventBy": "Par ",
+    "location": "Localisation",
+    "tickets": "Billets",
+    "addToCalendar": "Ajouter au calendrier",
+    "about": "À propos",
     "recap": "Récapitulatif",
     "selectedTickets": "{count, plural,=1 { # billet sélectionné} other {# billets sélectionnés}}",
     "total": "Total",
     "goToCheckout": "Continuer vers le paiement",
     "lastTickets": "Dernières places disponibles",
     "maxAttendees": "{count} personnes max",
-    "processing": "Traitement..."
+    "processing": "Traitement...",
+    "pastSingle": "A eu lieu le <date>{date}</date>",
+    "pastRange": "A eu lieu du <date>{start}</date> au <date>{end}</date>",
+    "futureSingle": "Aura lieu le <date>{date}</date>",
+    "futureRange": "Du <date>{start}</date> au <date>{end}</date>",
+    "ongoingSingle": "En cours depuis le <date>{date}</date>",
+    "ongoingRange": "En cours du <date>{start}</date> au <date>{end}</date>"
   },
   "ticket": {
     "selectedTickets": "{count, plural,=1 { # sélectionné} other {# sélectionnés}}",
@@ -77,7 +88,8 @@
     "fields": {
       "firstName": "Prénom",
       "lastName": "Nom",
-      "email": "Adresse email"
+      "email": "Adresse email",
+      "additionalInfo": "Informations complémentaires"
     },
     "placeholders": {
       "firstName": "Prénom",
@@ -120,9 +132,12 @@
       "label": "Code Promo",
       "placeholder": "Entrez votre code",
       "applyButton": "Appliquer",
+      "removeButton": "Retirer",
       "errorRequired": "Veuillez saisir un code promo.",
       "appliedTitle": "Code promo appliqué !",
-      "appliedDescription": "Le code \"{code}\" a été appliqué avec succès."
+      "appliedDescription": "Le code \"{code}\" a été appliqué avec succès.",
+      "removedTitle": "Code promo retiré",
+        "removedDescription": "Le code \"{code}\" a été retiré avec succès."
     },
     "orderSummary": {
       "title": "Récapitulatif",

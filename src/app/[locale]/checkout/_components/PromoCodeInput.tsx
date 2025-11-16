@@ -1,11 +1,12 @@
 "use client";
 
-import { useForm } from "react-hook-form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
-import { useTranslations } from "next-intl";
+import {useForm} from "react-hook-form";
+import {Input} from "@/components/ui/input";
+import {Button} from "@/components/ui/button";
+import {Label} from "@/components/ui/label";
+import {toast} from "sonner";
+import {useTranslations} from "next-intl";
+import {useEffect} from "react";
 
 interface PromoCodeFormValues {
     promoCode: string;
@@ -13,20 +14,50 @@ interface PromoCodeFormValues {
 
 interface PromoCodeInputProps {
     onApply: (code: string) => void;
+    onRemove: () => void;
+    initialPromoCode: string | null;
 }
 
-export function PromoCodeInput({ onApply }: PromoCodeInputProps) {
+export function PromoCodeInput({onApply, onRemove, initialPromoCode}: PromoCodeInputProps) {
     const t = useTranslations("checkout.promoCode");
-    const { register, handleSubmit, reset, formState: { errors } } = useForm<PromoCodeFormValues>();
+    const {register, handleSubmit, reset, setValue, formState: {errors}} = useForm<PromoCodeFormValues>();
+
+    useEffect(() => {
+        if (initialPromoCode) {
+            setValue("promoCode", initialPromoCode);
+        } else {
+            setValue("promoCode", ""); // Clear the input if no initial code
+        }
+    }, [initialPromoCode, setValue]);
 
     const onSubmit = (data: PromoCodeFormValues) => {
-        onApply(data.promoCode);
+        if (data.promoCode && data.promoCode !== initialPromoCode) {
+            onApply(data.promoCode);
+            toast.success(t("appliedTitle"), {
+                description: t("appliedDescription", {code: data.promoCode}),
+            });
+            // Keep the input value after applying
+            // reset(); // Removed reset to keep the applied code in the input
+        } else if (!data.promoCode && initialPromoCode) {
+            // If the input is cleared and there was an initial code, trigger removal
+            onRemove();
+            toast.success(t("removedTitle"), {
+                description: t("removedDescription", {code: initialPromoCode}),
+            });
+            reset(); // Reset after removal
+        } else if (!data.promoCode && !initialPromoCode) {
+            // If input is empty and there was no initial code, do nothing or show a message
+            toast.info(t("noCodeEntered"));
+        }
+    };
 
-        toast.success(t("appliedTitle"), {
-            description: t("appliedDescription", { code: data.promoCode }),
+    const handleRemoveClick = () => {
+        setValue("promoCode", "");
+        onRemove();
+        toast.success(t("removedTitle"), {
+            description: t("removedDescription", {code: initialPromoCode || ""}), // Use initialPromoCode if available
         });
-
-        reset();
+        reset(); // Reset form state after removal
     };
 
     return (
@@ -37,9 +68,17 @@ export function PromoCodeInput({ onApply }: PromoCodeInputProps) {
                     id="promoCode"
                     placeholder={t("placeholder")}
                     className="bg-background"
-                    {...register("promoCode", { required: t("errorRequired") })}
+                    {...register("promoCode", {required: t("errorRequired")})}
                 />
-                <Button type="submit">{t("applyButton")}</Button>
+                {initialPromoCode && !errors.promoCode ? (
+                    <Button type="button" variant="outline" onClick={handleRemoveClick}>
+                        {t("removeButton")}
+                    </Button>
+                ) : (
+                    <Button type="submit" disabled={!!errors.promoCode}>
+                        {t("applyButton")}
+                    </Button>
+                )}
             </form>
             {errors.promoCode && (
                 <p className="text-red-500 text-sm">{errors.promoCode.message}</p>

@@ -1,8 +1,8 @@
 "use client";
 import React from 'react';
-import {LockKeyhole} from "lucide-react";
 import {stepOrder, useCheckoutStore} from "@/lib/store/checkout";
 import {NavbarLogo} from "@/components/ui/resizable-navbar";
+import Footer from "@/components/layout/Footer";
 
 interface CheckoutLayoutProps {
     children: React.ReactNode
@@ -21,13 +21,7 @@ const Layout = ({children}: CheckoutLayoutProps) => {
                     <NavbarLogo/>
                 </div>
                 <div className="flex items-center space-x-2 pl-3 md:pl-0 pr-3">
-                    <div
-                        className="flex items-center px-3 py-2 bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-200 rounded">
-                        <LockKeyhole className="w-4 h-4"/>
-                        <p className="ml-0.75 text-sm text-center md:text-left ">Paiement sécurisé par Stripe
-                            <button className="underline hover:text-green-900"> (En savoir
-                                plus) </button></p>
-                    </div>
+
                 </div>
                 {!isLoading &&
                     <div className="absolute left-0 bottom-0 bg-primary h-0.5 transition-[width] duration-500 ease-in-out"
@@ -37,6 +31,7 @@ const Layout = ({children}: CheckoutLayoutProps) => {
 
             </header>
             {children}
+            <Footer/>
         </div>
     );
 };

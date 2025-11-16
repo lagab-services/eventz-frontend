@@ -1,14 +1,14 @@
 "use client";
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { useCartStore } from "@/lib/store/cart";
-import { Loader2, ShoppingCart, Tag, ChevronDown, ChevronUp } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { useTranslations } from "next-intl";
-import { PromoCodeInput } from "@/app/[locale]/checkout/_components/PromoCodeInput";
+import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
+import {Separator} from "@/components/ui/separator";
+import {useCartStore} from "@/lib/store/cart";
+import {Loader2, ShoppingCart, Tag, ChevronDown, ChevronUp} from "lucide-react";
+import {Badge} from "@/components/ui/badge";
+import {Button} from "@/components/ui/button";
+import {cn} from "@/lib/utils";
+import {useTranslations} from "next-intl";
+import {PromoCodeInput} from "@/app/[locale]/checkout/_components/PromoCodeInput";
 
 const OrderSummary = () => {
 
@@ -16,11 +16,27 @@ const OrderSummary = () => {
     const [isExpanded, setIsExpanded] = React.useState(false);
     const t = useTranslations('checkout.orderSummary');
 
+    const [appliedPromoCode, setAppliedPromoCode] = React.useState<string | null>(null);
+
+    const handleApplyPromoCode = (code: string) => {
+        setAppliedPromoCode(code);
+        // You might also want to update the cart state with the discount if the API call is successful
+        // For example: useCartStore.setState((state) => ({ cart: { ...state.cart, promoCode: code, discount: calculateDiscount(state.cart.subtotal, code) } }));
+        console.log("Promo code applied:", code);
+    };
+
+    const handleRemovePromoCode = () => {
+        setAppliedPromoCode(null);
+        // You might also want to update the cart state to remove the discount
+        // For example: useCartStore.setState((state) => ({ cart: { ...state.cart, promoCode: null, discount: 0 } }));
+        console.log("Promo code removed");
+    };
+
     if (!cart) {
         return (
             <Card className="sticky top-6 border-0 shadow-none w-full bg-transparent">
                 <CardContent className="flex items-center justify-center py-8">
-                    <Loader2 className="h-6 w-6 animate-spin text-gray-400" />
+                    <Loader2 className="h-6 w-6 animate-spin text-gray-400"/>
                 </CardContent>
             </Card>
         );
@@ -30,7 +46,7 @@ const OrderSummary = () => {
         return (
             <Card className="sticky top-6 border-0 shadow-none w-full bg-transparent">
                 <CardContent className="flex flex-col items-center justify-center py-8 text-center">
-                    <ShoppingCart className="h-12 w-12 text-gray-300 mb-3" />
+                    <ShoppingCart className="h-12 w-12 text-gray-300 mb-3"/>
                     <p className="text-sm text-gray-500">{t('emptyCart')}</p>
                 </CardContent>
             </Card>
@@ -54,7 +70,7 @@ const OrderSummary = () => {
                     <CardTitle className="flex items-center gap-2">
                         <span>{t('title')}</span>
                         <Badge variant="secondary">
-                            {t('ticketCount', { count: cart.totalItems })}
+                            {t('ticketCount', {count: cart.totalItems})}
                         </Badge>
                     </CardTitle>
                     <Button
@@ -65,9 +81,9 @@ const OrderSummary = () => {
                         aria-label={isExpanded ? t('collapse') : t('expand')}
                     >
                         {isExpanded ? (
-                            <ChevronUp className="h-4 w-4" />
+                            <ChevronUp className="h-4 w-4"/>
                         ) : (
-                            <ChevronDown className="h-4 w-4" />
+                            <ChevronDown className="h-4 w-4"/>
                         )}
                     </Button>
                 </div>
@@ -107,7 +123,7 @@ const OrderSummary = () => {
                                         )}
                                     </div>
                                     <p className="font-semibold text-sm whitespace-nowrap">
-                                        {t('price', { amount: item.totalPrice.toFixed(2) })}
+                                        {t('price', {amount: item.totalPrice.toFixed(2)})}
                                     </p>
                                 </div>
                             ))}
@@ -115,15 +131,17 @@ const OrderSummary = () => {
                     ))}
                 </div>
 
-                <PromoCodeInput onApply={(code) => console.log("Promo code applied:", code)} />
-                <Separator />
+                <PromoCodeInput onApply={handleApplyPromoCode}
+                                initialPromoCode={cart.promoCode || null}
+                                onRemove={handleRemovePromoCode}/>
+                <Separator/>
 
                 {/* Price details */}
                 <div className="space-y-2">
                     <div className="flex justify-between text-sm">
                         <span className="text-gray-600 dark:text-gray-400">{t('subtotal')}</span>
                         <span className="font-medium">
-                            {t('price', { amount: cart.subtotal.toFixed(2) })}
+                            {t('price', {amount: cart.subtotal.toFixed(2)})}
                         </span>
                     </div>
 
@@ -131,7 +149,7 @@ const OrderSummary = () => {
                         <div className="flex justify-between text-sm">
                             <span className="text-gray-600 dark:text-gray-400">{t('serviceFees')}</span>
                             <span className="font-medium">
-                                {t('price', { amount: cart.fees.toFixed(2) })}
+                                {t('price', {amount: cart.fees.toFixed(2)})}
                             </span>
                         </div>
                     )}
@@ -139,7 +157,7 @@ const OrderSummary = () => {
                     {cart.discount > 0 && (
                         <div className="flex justify-between text-sm">
                             <div className="flex items-center gap-1 text-green-700">
-                                <Tag className="h-3 w-3" />
+                                <Tag className="h-3 w-3"/>
                                 <span>{t('discount')}</span>
                                 {cart.promoCode && (
                                     <Badge variant="outline" className="ml-1 text-xs border-green-700 text-green-700">
@@ -148,20 +166,20 @@ const OrderSummary = () => {
                                 )}
                             </div>
                             <span className="font-medium text-green-700">
-                                {t('discountAmount', { amount: cart.discount.toFixed(2) })}
+                                {t('discountAmount', {amount: cart.discount.toFixed(2)})}
                             </span>
                         </div>
                     )}
                 </div>
 
-                <Separator className="bg-gray-300" />
+                <Separator className="bg-gray-300"/>
 
                 {/* Total */}
                 <div className="flex justify-between items-center pt-2">
                     <span className="font-bold text-lg">{t('total')}</span>
                     <div className="text-right">
                         <span className="font-bold text-2xl text-primary">
-                            {t('price', { amount: cart.total.toFixed(2) })}
+                            {t('price', {amount: cart.total.toFixed(2)})}
                         </span>
                         <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                             {t('taxIncluded')}
@@ -172,10 +190,11 @@ const OrderSummary = () => {
                 {/* Messages */}
                 {(cart.warnings.length > 0 || cart.errors.length > 0) && (
                     <>
-                        <Separator />
+                        <Separator/>
                         <div className="space-y-2">
                             {cart.warnings.map((warning, index) => (
-                                <div key={`warning-${index}`} className="flex items-start gap-2 p-2 bg-yellow-50 rounded-md">
+                                <div key={`warning-${index}`}
+                                     className="flex items-start gap-2 p-2 bg-yellow-50 rounded-md">
                                     <span className="text-yellow-600 text-xs">⚠️</span>
                                     <p className="text-xs text-yellow-700 flex-1">
                                         {warning.message}

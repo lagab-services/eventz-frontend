@@ -70,6 +70,20 @@
       "averageRating": 4.5,
       "reviewCount": 42,
       "addressId": 1,
+      "address": {
+        "id": 1,
+        "name": "Convention Center Paris",
+        "address1": "2 Place de la Porte de Versailles",
+        "address2": "",
+        "city": "Paris",
+        "state": "Île-de-France",
+        "country": "France",
+        "zipCode": "75015",
+        "longitude": 2.2869,
+        "latitude": 48.8327,
+        "isOnline": false,
+        "onlineUrl": null
+      },
       "ticketCategories": [
         {
           "id": 1,
@@ -186,6 +200,20 @@
       "averageRating": 4.8,
       "reviewCount": 156,
       "addressId": 2,
+      "address": {
+        "id": 2,
+        "name": "Outdoor Festival Grounds",
+        "address1": "Route des Festivals",
+        "address2": "Parc des Expositions",
+        "city": "Lyon",
+        "state": "Auvergne-Rhône-Alpes",
+        "country": "France",
+        "zipCode": "69007",
+        "longitude": 4.8357,
+        "latitude": 45.7640,
+        "isOnline": false,
+        "onlineUrl": null
+      },
       "ticketCategories":[]
     }
   ],

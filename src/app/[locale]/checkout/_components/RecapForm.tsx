@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Button } from "@/components/ui/button";
+import {Button} from "@/components/ui/button";
 import {
     ListTodo,
     User,
@@ -12,7 +12,7 @@ import {
     ChevronUp,
     Edit,
 } from "lucide-react";
-import { useCheckoutStore } from "@/lib/store/checkout";
+import {useCheckoutStore} from "@/lib/store/checkout";
 import {
     Card,
     CardContent,
@@ -20,20 +20,70 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
+import {Badge} from "@/components/ui/badge";
+import {Separator} from "@/components/ui/separator";
 import {
     Collapsible,
     CollapsibleContent,
     CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { cn } from "@/lib/utils";
-import { useTranslations } from "next-intl";
+import {cn} from "@/lib/utils";
+import {useTranslations} from "next-intl";
+import {createOrder} from "@/app/[locale]/checkout/_lib/actions";
+import {toast} from "sonner";
+import {orderRequestSchema} from "@/app/[locale]/checkout/_lib/validations";
+import {OrderRequest} from "@/types/checkout";
+
+const  buildOrderRequest= (): OrderRequest =>{
+    const { customerInfo, attendees } = useCheckoutStore.getState();
+
+    return {
+        billingName: `${customerInfo.firstName} ${customerInfo.lastName}`,
+        billingEmail: customerInfo.email,
+        billingPhone: customerInfo.phone || undefined,
+
+        /*billingAddress: customerInfo.address || undefined,
+        billingCity: customerInfo.city || undefined,
+        billingZipCode: customerInfo.zipCode || undefined,
+        billingCountry: customerInfo.country || undefined,*/
+
+        attendees: attendees.map(a => ({
+            firstName: a.firstName,
+            lastName: a.lastName,
+            email: a.email,
+            ticketTypeId: a.ticketTypeId,
+            customFields: a.customFields ?? {}
+        })),
+
+        notes: undefined,
+
+        acceptTerms: customerInfo.acceptTerms,
+        subscribeNewsletter: customerInfo.subscribeNewsletter ?? false,
+
+        successUrl: "/checkout/success",
+        cancelUrl: "/checkout/cancel",
+    };
+}
+
+
+const  buildValidatedOrderRequest = (): OrderRequest =>{
+    const order = buildOrderRequest();
+
+    const parsed = orderRequestSchema.safeParse(order);
+
+    if (!parsed.success) {
+        console.error("❌ Order validation error:", parsed.error.flatten());
+        throw new Error("Invalid order data");
+    }
+
+    return parsed.data;
+}
+
 
 const RecapForm = () => {
     const t = useTranslations("checkout.recap");
 
-    const { customerInfo, attendees, customFields, previousStep, nextStep } =
+    const {customerInfo, attendees, customFields, previousStep, nextStep} =
         useCheckoutStore();
 
     const [expandedAttendees, setExpandedAttendees] = React.useState<number[]>([]);
@@ -51,11 +101,11 @@ const RecapForm = () => {
         const key = attendee.ticketTypeId;
         if (!acc[key]) {
             acc[key] = {
-                ticketTypeName: attendee.ticketTypeName,
+                ticketTypeName: attendee?.ticketTypeName,
                 attendees: [],
             };
         }
-        acc[key].attendees.push({ ...attendee, originalIndex: index });
+        acc[key].attendees.push({...attendee, originalIndex: index});
         return acc;
     }, {} as Record<number, { ticketTypeName: string; attendees: any[] }>);
 
@@ -96,7 +146,7 @@ const RecapForm = () => {
     return (
         <div className="max-w-4xl mx-auto">
             <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                <ListTodo className="w-8 h-8 text-primary" />
+                <ListTodo className="w-8 h-8 text-primary"/>
             </div>
 
             <div className="text-center mb-8">
@@ -112,11 +162,11 @@ const RecapForm = () => {
                     <CardHeader>
                         <div className="flex items-center gap-3">
                             <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                                <Users className="w-5 h-5 text-primary" />
+                                <Users className="w-5 h-5 text-primary"/>
                             </div>
                             <div>
                                 <CardTitle className="text-lg">
-                                    {t("attendees.title", { count: attendees.length })}
+                                    {t("attendees.title", {count: attendees.length})}
                                 </CardTitle>
                                 <CardDescription>{t("attendees.description")}</CardDescription>
                             </div>
@@ -160,9 +210,11 @@ const RecapForm = () => {
                                                     )}
                                                 >
                                                     <CollapsibleTrigger className="w-full">
-                                                        <div className="flex items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-neutral-950 transition-colors">
+                                                        <div
+                                                            className="flex items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-neutral-950 transition-colors">
                                                             <div className="flex items-center gap-3">
-                                                                <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center text-sm font-medium text-primary">
+                                                                <div
+                                                                    className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center text-sm font-medium text-primary">
                                                                     {index + 1}
                                                                 </div>
                                                                 <div className="text-left">
@@ -188,9 +240,9 @@ const RecapForm = () => {
                                                                     </Badge>
                                                                 )}
                                                                 {isExpanded ? (
-                                                                    <ChevronUp className="w-5 h-5 text-gray-400" />
+                                                                    <ChevronUp className="w-5 h-5 text-gray-400"/>
                                                                 ) : (
-                                                                    <ChevronDown className="w-5 h-5 text-gray-400" />
+                                                                    <ChevronDown className="w-5 h-5 text-gray-400"/>
                                                                 )}
                                                             </div>
                                                         </div>
@@ -230,12 +282,13 @@ const RecapForm = () => {
                                                                 {/* Custom fields */}
                                                                 {hasCustomFields && (
                                                                     <>
-                                                                        <Separator className="my-3" />
+                                                                        <Separator className="my-3"/>
                                                                         <div>
                                                                             <p className="text-xs font-semibold text-gray-700 mb-3">
                                                                                 {t("fields.additionalInfo")}
                                                                             </p>
-                                                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                                                            <div
+                                                                                className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                                                                 {Object.entries(
                                                                                     attendee.customFields
                                                                                 ).map(([fieldName, value]) => (
@@ -281,7 +334,7 @@ const RecapForm = () => {
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-3">
                                 <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                                    <User className="w-5 h-5 text-primary" />
+                                    <User className="w-5 h-5 text-primary"/>
                                 </div>
                                 <div>
                                     <CardTitle className="text-lg">
@@ -293,7 +346,7 @@ const RecapForm = () => {
                                 </div>
                             </div>
                             <Button variant="ghost" size="sm" onClick={previousStep}>
-                                <Edit className="w-4 h-4 mr-2" />
+                                <Edit className="w-4 h-4 mr-2"/>
                                 {t("customer.edit")}
                             </Button>
                         </div>
@@ -313,7 +366,7 @@ const RecapForm = () => {
                                     {t("customer.email")}
                                 </p>
                                 <p className="text-base text-gray-900 dark:text-gray-300 flex items-center gap-2">
-                                    <Mail className="w-4 h-4 text-gray-400" />
+                                    <Mail className="w-4 h-4 text-gray-400"/>
                                     {customerInfo.email}
                                 </p>
                             </div>
@@ -323,7 +376,7 @@ const RecapForm = () => {
                                         {t("customer.phone")}
                                     </p>
                                     <p className="text-base text-gray-900 dark:text-gray-300 flex items-center gap-2">
-                                        <Phone className="w-4 h-4 text-gray-400" />
+                                        <Phone className="w-4 h-4 text-gray-400"/>
                                         {customerInfo.phone}
                                     </p>
                                 </div>
@@ -346,7 +399,19 @@ const RecapForm = () => {
                 <Button variant="outline" className="flex-1" onClick={previousStep}>
                     {t("buttons.back")}
                 </Button>
-                <Button onClick={nextStep} className="flex-1">
+                <Button onClick={async ()=>{
+                    const loadingToast = toast.loading(t('order_loading'));
+
+                    nextStep();
+                    const order = buildValidatedOrderRequest();
+                    const {data, error} = await createOrder(order);
+                    if(error) {
+                        toast.error(t('order_error'), {id: loadingToast});
+                    } else {
+                        toast.success(t('order_success'), {id: loadingToast});
+                        window.location.href = data?.checkoutUrl || '/';
+                    }
+                }} className="flex-1">
                     {t("buttons.continueToPayment")}
                 </Button>
             </div>

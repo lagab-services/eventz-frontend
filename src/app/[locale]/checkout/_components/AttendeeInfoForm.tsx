@@ -310,7 +310,7 @@ const AttendeeInfoForm = ({ eventId }: AttendeeInfoFormProps) => {
                                                                 {relevantCustomFields.length > 0 && (
                                                                     <div className="space-y-4 pt-4 border-t">
                                                                         <h4 className="font-medium text-sm text-gray-700 dark:text-gray-400">
-                                                                            Informations complémentaires
+                                                                            {t('fields.additionalInfo')}
                                                                         </h4>
                                                                         <div className="grid grid-cols-1 gap-4">
                                                                             {relevantCustomFields.map((customField) => (
