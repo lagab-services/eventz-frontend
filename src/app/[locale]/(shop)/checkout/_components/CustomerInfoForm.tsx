@@ -22,7 +22,7 @@ import { useCheckoutStore } from "@/lib/store/checkout";
 import {
     CustomerInfo,
     customerInfoSchema,
-} from "@/app/[locale]/checkout/_lib/validations";
+} from "../_lib/validations";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { useTranslations } from "next-intl";

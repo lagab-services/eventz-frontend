@@ -29,9 +29,9 @@ import {
 } from "@/components/ui/collapsible";
 import {cn} from "@/lib/utils";
 import {useTranslations} from "next-intl";
-import {createOrder} from "@/app/[locale]/checkout/_lib/actions";
+import {createOrder} from "../_lib/actions";
 import {toast} from "sonner";
-import {orderRequestSchema} from "@/app/[locale]/checkout/_lib/validations";
+import {orderRequestSchema} from "../_lib/validations";
 import {OrderRequest} from "@/types/checkout";
 
 const  buildOrderRequest= (): OrderRequest =>{
@@ -60,7 +60,7 @@ const  buildOrderRequest= (): OrderRequest =>{
         acceptTerms: customerInfo.acceptTerms,
         subscribeNewsletter: customerInfo.subscribeNewsletter ?? false,
 
-        successUrl: "/checkout/success",
+        successUrl: "/checkout/thanks",
         cancelUrl: "/checkout/cancel",
     };
 }

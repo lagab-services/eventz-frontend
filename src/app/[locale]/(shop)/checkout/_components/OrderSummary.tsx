@@ -8,7 +8,7 @@ import {Badge} from "@/components/ui/badge";
 import {Button} from "@/components/ui/button";
 import {cn} from "@/lib/utils";
 import {useTranslations} from "next-intl";
-import {PromoCodeInput} from "@/app/[locale]/checkout/_components/PromoCodeInput";
+import {PromoCodeInput} from "./PromoCodeInput";
 
 const OrderSummary = () => {
 

@@ -19,7 +19,7 @@ import {
     AccordionTrigger,
 } from "@/components/ui/accordion";
 import { useTranslations } from 'next-intl';
-import {CustomFieldRenderer} from "@/app/[locale]/checkout/_components/CustomFieldRenderer";
+import {CustomFieldRenderer} from "./CustomFieldRenderer";
 import {AttendeeInfo} from "@/types/checkout";
 
 

@@ -8,19 +8,30 @@ import {
     StepperTitle,
     StepperTrigger
 } from "@/components/ui/stepper";
-import {Check, LoaderCircleIcon} from "lucide-react";
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from "@/components/ui/empty";
+import {Check, ChevronLeft, LoaderCircleIcon, ShoppingCart} from "lucide-react";
 import {Card, CardContent} from "@/components/ui/card";
 import {stepOrder, useCheckoutStore} from "@/lib/store/checkout";
 import AttendeeInfoForm from "./_components/AttendeeInfoForm";
 import CustomerInfoForm from "./_components/CustomerInfoForm";
-import {useCheckoutInitialization} from "@/app/[locale]/checkout/_hooks/useCheckoutInitialization";
+import {useCheckoutInitialization} from "@/app/[locale]/(shop)/checkout/_hooks/useCheckoutInitialization";
 import OrderSummary from "./_components/OrderSummary";
 import {Spinner} from "@/components/ui/spinner";
-import RecapForm from "@/app/[locale]/checkout/_components/RecapForm";
+import RecapForm from "@/app/[locale]/(shop)/checkout/_components/RecapForm";
+import {useCartStore} from "@/lib/store/cart";
+import {Button} from "@/components/ui/button";
 
 const Page = () => {
 
     useCheckoutInitialization();
+    const cart = useCartStore((state) => state.cart);
     const { currentStep, completedSteps, isLoading} = useCheckoutStore();
 
     const renderStep = useCallback((step: string) => {
@@ -58,6 +69,22 @@ const Page = () => {
 
     if (isLoading) {
         return <div className="text-center py-20 flex justify-center"><Spinner /></div>;
+    }
+    if(!cart?.items){
+        return <div className="container mx-auto">
+            <Empty>
+                <EmptyHeader>
+                    <EmptyMedia variant="icon">
+                        <ShoppingCart />
+                    </EmptyMedia>
+                    <EmptyTitle>Cart Empty</EmptyTitle>
+                    <EmptyDescription>No data found</EmptyDescription>
+                </EmptyHeader>
+                <EmptyContent>
+                    <Button><ChevronLeft/> back</Button>
+                </EmptyContent>
+            </Empty>
+        </div>;
     }
 
     return (
