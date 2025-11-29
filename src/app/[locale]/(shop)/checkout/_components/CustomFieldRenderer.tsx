@@ -7,37 +7,40 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { UseFormReturn } from 'react-hook-form';
+import {Path, UseFormReturn} from 'react-hook-form';
 
-interface CustomFieldRendererProps {
-    field: CustomField;
-    form: UseFormReturn<any>;
+interface CustomFieldRendererProps<TFormValues extends Record<string, unknown>> {
+    customField: CustomField;
+    form: UseFormReturn<TFormValues>;
 }
 
-export const CustomFieldRenderer: React.FC<CustomFieldRendererProps> = ({ field, form }) => {
-    const fieldPath = `customFields.${field.fieldName}`;
+export const CustomFieldRenderer = <TFormValues extends Record<string, unknown>>({ customField, form }: CustomFieldRendererProps<TFormValues>) => {
+    const fieldPath = `customFields.${customField.fieldName}` as Path<TFormValues>;
 
     const renderField = () => {
-        switch (field.fieldType) {
+        switch (customField.fieldType) {
             case 'TEXT':
             case 'NUMBER':
                 return (
                     <FormField
                         control={form.control}
                         name={fieldPath}
-                        rules={{ required: field.isRequired ? `${field.fieldLabel} est requis` : false }}
+                        rules={{ required: customField.isRequired ? `${customField.fieldLabel} est requis` : false }}
                         render={({ field: formField }) => (
                             <FormItem>
                                 <FormLabel>
-                                    {field.fieldLabel}
-                                    {field.isRequired && <span className="text-red-500 ml-1">*</span>}
+                                    {customField.fieldLabel}
+                                    {customField.isRequired && <span className="text-red-500 ml-1">*</span>}
                                 </FormLabel>
                                 <FormControl>
                                     <Input
-                                        type={field.fieldType === 'NUMBER' ? 'number' : 'text'}
+                                        type={customField.fieldType === 'NUMBER' ? 'number' : 'text'}
                                         className="bg-background"
-                                        placeholder={field.placeholder}
-                                        {...formField}
+                                        placeholder={customField.placeholder}
+                                        value={(formField.value ?? "")as string}
+                                        onChange={e => formField.onChange(e.target.value)} // map RHF onChange
+                                        onBlur={formField.onBlur}
+                                        ref={formField.ref}
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -51,18 +54,21 @@ export const CustomFieldRenderer: React.FC<CustomFieldRendererProps> = ({ field,
                     <FormField
                         control={form.control}
                         name={fieldPath}
-                        rules={{ required: field.isRequired ? `${field.fieldLabel} est requis` : false }}
+                        rules={{ required: customField.isRequired ? `${customField.fieldLabel} est requis` : false }}
                         render={({ field: formField }) => (
                             <FormItem>
                                 <FormLabel>
-                                    {field.fieldLabel}
-                                    {field.isRequired && <span className="text-red-500 ml-1">*</span>}
+                                    {customField.fieldLabel}
+                                    {customField.isRequired && <span className="text-red-500 ml-1">*</span>}
                                 </FormLabel>
                                 <FormControl>
                                     <Textarea
-                                        placeholder={field.placeholder}
+                                        placeholder={customField.placeholder}
                                         className="bg-background"
-                                        {...formField}
+                                        value={(formField.value ?? "")as string}
+                                        onChange={e => formField.onChange(e.target.value)} // map RHF onChange
+                                        onBlur={formField.onBlur}
+                                        ref={formField.ref}
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -71,23 +77,23 @@ export const CustomFieldRenderer: React.FC<CustomFieldRendererProps> = ({ field,
                     />
                 );
 
-            case 'SELECT':
-                const options = field.fieldOptions?.split(',').map(opt => opt.trim()) || [];
+            case 'SELECT': {
+                const options = customField.fieldOptions?.split(',').map(opt => opt.trim()) || [];
                 return (
                     <FormField
                         control={form.control}
                         name={fieldPath}
-                        rules={{ required: field.isRequired ? `${field.fieldLabel} est requis` : false }}
-                        render={({ field: formField }) => (
+                        rules={{required: customField.isRequired ? `${customField.fieldLabel} est requis` : false}}
+                        render={({field: formField}) => (
                             <FormItem>
                                 <FormLabel>
-                                    {field.fieldLabel}
-                                    {field.isRequired && <span className="text-red-500 ml-1">*</span>}
+                                    {customField.fieldLabel}
+                                    {customField.isRequired && <span className="text-red-500 ml-1">*</span>}
                                 </FormLabel>
-                                <Select onValueChange={formField.onChange} value={formField.value} >
+                                <Select onValueChange={formField.onChange} value={(formField.value ?? "") as string}>
                                     <FormControl>
                                         <SelectTrigger className="bg-background">
-                                            <SelectValue placeholder={field.placeholder} />
+                                            <SelectValue placeholder={customField.placeholder}/>
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent>
@@ -98,30 +104,31 @@ export const CustomFieldRenderer: React.FC<CustomFieldRendererProps> = ({ field,
                                         ))}
                                     </SelectContent>
                                 </Select>
-                                <FormMessage />
+                                <FormMessage/>
                             </FormItem>
                         )}
                     />
                 );
+            }
 
             case 'CHECKBOX':
                 return (
                     <FormField
                         control={form.control}
                         name={fieldPath}
-                        rules={{ required: field.isRequired ? `${field.fieldLabel} est requis` : false }}
+                        rules={{ required: customField.isRequired ? `${customField.fieldLabel} est requis` : false }}
                         render={({ field: formField }) => (
                             <FormItem className="flex flex-row items-start space-x-3 space-y-0">
                                 <FormControl>
                                     <Checkbox
-                                        checked={formField.value}
+                                        checked={!!formField.value}
                                         onCheckedChange={formField.onChange}
                                     />
                                 </FormControl>
                                 <div className="space-y-1 leading-none">
                                     <FormLabel>
-                                        {field.fieldLabel}
-                                        {field.isRequired && <span className="text-red-500 ml-1">*</span>}
+                                        {customField.fieldLabel}
+                                        {customField.isRequired && <span className="text-red-500 ml-1">*</span>}
                                     </FormLabel>
                                 </div>
                                 <FormMessage />

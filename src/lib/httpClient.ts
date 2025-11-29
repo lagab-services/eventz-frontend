@@ -188,7 +188,7 @@ class RestApi {
             } else if (typeof data === 'object') {
                 config.body = JSON.stringify(data);
             } else {
-                config.body = data;
+                config.body = String(data);
             }
         }
 

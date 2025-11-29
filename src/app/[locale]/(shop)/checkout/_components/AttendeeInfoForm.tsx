@@ -21,34 +21,55 @@ import {
 import { useTranslations } from 'next-intl';
 import {CustomFieldRenderer} from "./CustomFieldRenderer";
 import {AttendeeInfo} from "@/types/checkout";
+import {CustomField} from "@/types/customFields";
 
 
 // Validation schema for an attendee
-const createAttendeeSchema = (customFields: any[]) => {
-    const customFieldsSchema: Record<string, any> = {};
+const createAttendeeSchema = (customFields: CustomField[]) => {
+    const customFieldsSchema: Record<string, z.ZodTypeAny> = {};
 
     customFields.forEach(field => {
-        if (field.isRequired) {
-            switch (field.fieldType) {
-                case 'TEXT':
-                case 'TEXTAREA':
-                    customFieldsSchema[field.fieldName] = z.string().min(1, `${field.fieldLabel} est requis`);
-                    break;
-                case 'NUMBER':
-                    customFieldsSchema[field.fieldName] = z.number().min(0, `${field.fieldLabel} est requis`);
-                    break;
-                case 'SELECT':
-                    customFieldsSchema[field.fieldName] = z.string().min(1, `${field.fieldLabel} est requis`);
-                    break;
-                case 'CHECKBOX':
-                    customFieldsSchema[field.fieldName] = z.boolean().refine(val => val === true, {
-                        message: `${field.fieldLabel} est requis`
+        let fieldSchema: z.ZodTypeAny;
+
+        switch (field.fieldType) {
+            case 'TEXT':
+            case 'TEXTAREA':
+                if (field.isRequired) {
+                    fieldSchema = z.string().min(1, `${field.fieldLabel} est requis`);
+                } else {
+                    fieldSchema = z.string().optional();
+                }
+                break;
+            case 'NUMBER':
+                if (field.isRequired) {
+                    fieldSchema = z.number().min(0, `${field.fieldLabel} est requis`);
+                } else {
+                    fieldSchema = z.number().optional();
+                }
+                break;
+            case 'SELECT':
+                if (field.isRequired) {
+                    fieldSchema = z.string().min(1, `${field.fieldLabel} est requis`);
+                } else {
+                    fieldSchema = z.string().optional();
+                }
+                break;
+            case 'CHECKBOX':
+                fieldSchema = z.boolean();
+                if (field.isRequired) {
+                    fieldSchema = fieldSchema.refine(val => val === true, {
+                        message: `${field.fieldLabel} est requis`,
                     });
-                    break;
-            }
-        } else {
-            customFieldsSchema[field.fieldName] = z.any().optional();
+                } else {
+                    fieldSchema = fieldSchema.optional();
+                }
+                break;
+            default:
+                // Cas de sécurité si un nouveau type apparaît
+                fieldSchema = z.any().optional();
         }
+
+        customFieldsSchema[field.fieldName] = fieldSchema;
     });
 
     return z.object({
@@ -60,8 +81,6 @@ const createAttendeeSchema = (customFields: any[]) => {
         customFields: z.object(customFieldsSchema).optional(),
     });
 };
-
-type AttendeeInfoSchema = z.infer<typeof createAttendeeSchema>;
 
 interface AttendeeInfoFormProps {
     eventId: number;
@@ -91,6 +110,7 @@ const AttendeeInfoForm = ({ eventId }: AttendeeInfoFormProps) => {
         : [];
 
     const attendeeSchema = createAttendeeSchema(relevantCustomFields);
+    type AttendeeInfoSchema = z.infer<typeof attendeeSchema>;
 
     const form = useForm<AttendeeInfoSchema>({
         resolver: zodResolver(attendeeSchema),
@@ -119,8 +139,30 @@ const AttendeeInfoForm = ({ eventId }: AttendeeInfoFormProps) => {
         }
     }, [currentAttendeeIndex, currentAttendee, form, customerInfo]);
 
-    const onSubmit = (data: AttendeeInfo) => {
-        updateAttendee(currentAttendeeIndex, data);
+    const onSubmit = (data: AttendeeInfoSchema) => {
+
+        const customFieldsData: Record<string, unknown> = {};
+        if (data.customFields) {
+            Object.entries(data.customFields).forEach(([key, value]) => {
+                // Exemple: si c'est un nombre au format string, on le convertit
+                if (typeof value === 'string' && !isNaN(Number(value))) {
+                    customFieldsData[key] = Number(value);
+                } else {
+                    customFieldsData[key] = value;
+                }
+            });
+        }
+
+        const attendeeToUpdate: AttendeeInfo = {
+            firstName: data.firstName,
+            lastName: data.lastName,
+            email: data.email,
+            ticketTypeId: data.ticketTypeId,
+            ticketTypeName: data.ticketTypeName,
+            customFields: customFieldsData,
+        };
+
+        updateAttendee(currentAttendeeIndex, attendeeToUpdate);
 
         if (currentAttendeeIndex === 0) {
             setCustomerInfo({
@@ -178,7 +220,7 @@ const AttendeeInfoForm = ({ eventId }: AttendeeInfoFormProps) => {
         const key = attendee.ticketTypeId;
         if (!acc[key]) {
             acc[key] = {
-                ticketTypeName: attendee.ticketTypeName,
+                ticketTypeName: attendee.ticketTypeName as string,
                 attendees: [],
             };
         }
@@ -316,7 +358,7 @@ const AttendeeInfoForm = ({ eventId }: AttendeeInfoFormProps) => {
                                                                             {relevantCustomFields.map((customField) => (
                                                                                 <CustomFieldRenderer
                                                                                     key={customField.id}
-                                                                                    field={customField}
+                                                                                    customField={customField}
                                                                                     form={form}
                                                                                 />
                                                                             ))}
