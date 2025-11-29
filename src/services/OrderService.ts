@@ -23,13 +23,13 @@ export class OrderService {
 
     // ➤ POST /api/orders/checkout
     async createCheckoutSession(order: OrderRequest): Promise<CheckoutResponse> {
-        const res = await this.api.post("/api/orders/checkout", order);
+        const res = await this.api.post<CheckoutResponse>("/api/orders/checkout", order);
         return res.data;
     }
 
     // ➤ GET /api/orders/{orderId}
     async getOrder(orderId: number): Promise<OrderResponse> {
-        const res = await this.api.get(`/api/orders/${orderId}`);
+        const res = await this.api.get<OrderResponse>(`/api/orders/${orderId}`);
         return res.data;
     }
 
@@ -39,7 +39,7 @@ export class OrderService {
         page: number = 0,
         size: number = 20
     ): Promise<Page<OrderResponse>> {
-        const res = await this.api.get(`/api/orders/user/${userId}`, {
+        const res = await this.api.get<Page<OrderResponse>>(`/api/orders/user/${userId}`, {
             params: {page, size}
         });
         return res.data;
@@ -51,7 +51,7 @@ export class OrderService {
         page: number = 0,
         size: number = 20
     ): Promise<Page<OrderResponse>> {
-        const res = await this.api.get(`/api/orders/event/${eventId}`, {
+        const res = await this.api.get<Page<OrderResponse>>(`/api/orders/event/${eventId}`, {
             params: {page, size}
         });
         return res.data;
@@ -62,7 +62,7 @@ export class OrderService {
         orderId: number,
         reason?: string
     ): Promise<OrderResponse> {
-        const res = await this.api.put(`/api/orders/${orderId}/cancel`, null, {
+        const res = await this.api.put<OrderResponse>(`/api/orders/${orderId}/cancel`, null, {
             params: reason ? {reason} : {}
         });
         return res.data;
@@ -75,7 +75,7 @@ export class OrderService {
     async trackGuestOrder(
         request: TrackOrderRequest
     ): Promise<OrderResponse> {
-        const res = await this.api.post("/api/guest/orders/track", request);
+        const res = await this.api.post<OrderResponse>("/api/guest/orders/track", request);
         return res.data;
     }
 
@@ -83,7 +83,7 @@ export class OrderService {
         orderNumber: string,
         attendeeId: number
     ): Promise<Blob> {
-        const res = await this.api.get(`/api/guest/orders/${orderNumber}/attendees/${attendeeId}/ticket`, {
+        const res = await this.api.get<Blob>(`/api/guest/orders/${orderNumber}/attendees/${attendeeId}/ticket`, {
             responseType: "blob", // nécessaire pour un PDF
         });
         return res.data;

@@ -18,12 +18,13 @@ import {useTranslations} from "next-intl";
 import Link from "next/link";
 import {signIn} from "next-auth/react";
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
+interface UserAuthFormProps  {
+    className?: string;
 }
 
 type FormData = z.infer<typeof userLoginSchema>
 
-const UserAuthForm = ({className, ...props}: UserAuthFormProps) => {
+const UserAuthForm = ({className}: UserAuthFormProps) => {
     const t = useTranslations('auth');
     const form = useForm<FormData>({
         resolver: zodResolver(userLoginSchema),
@@ -59,7 +60,7 @@ const UserAuthForm = ({className, ...props}: UserAuthFormProps) => {
     }
 
     return (
-        <div className={cn("grid gap-6", className)} {...props}>
+        <div className={cn("grid gap-6", className)}>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)}>
                     <div className="grid gap-2">

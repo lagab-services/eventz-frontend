@@ -1,4 +1,4 @@
-enum EventStatus {
+export enum EventStatus {
     DRAFT = 'DRAFT',
     PUBLISHED = 'PUBLISHED',
     CANCELLED = 'CANCELLED',
@@ -14,7 +14,7 @@ enum EventType {
     OTHER = 'OTHER'
 }
 
-interface Address {
+export interface Address {
     id: number;
     name: string | null;
     address1: string;
@@ -91,4 +91,42 @@ export interface Event {
     ticketCategories: TicketCategory[];
     averageRating: number;
     reviewCount: number;
+}
+
+/**
+ * Represents a summary of an event, typically used in lists or search results.
+ * This DTO is leaner than the full `Event` object, focusing on essential display information.
+ */
+export interface EventSummary {
+    id: number;
+    name: string;
+    summary: string;
+    startDate: string; // ISO string format
+    endDate: string;   // ISO string format
+    status: EventStatus;
+    type: EventType;
+    imageUrl: string;
+    isPublic: boolean;
+    isFree: boolean;
+    currency: string;
+    city?: string; // Optional, as some events might be online or city not explicitly listed in summary
+    country?: string; // Optional
+    averageRating?: number | null;
+    reviewCount?: number | null;
+    availableTickets?: number | null; // Added based on the /available-tickets endpoint
+}
+
+export interface EventSearchParams {
+    keyword?: string;
+    type?: string; // Use string for enum values if they are sent as strings
+    status?: string; // Use string for enum values if they are sent as strings
+    city?: string;
+    startDate?: string; // ISO format string
+    endDate?: string; // ISO format string
+    isFree?: boolean;
+    latitude?: number;
+    longitude?: number;
+    radius?: number;
+    organizerId?: number;
+    organizationId?: string;
 }

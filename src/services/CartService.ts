@@ -38,26 +38,25 @@ export class CartService {
 
     // ➤ POST /api/cart/items
     async addToCart(req: AddToCartRequest): Promise<CartResponse> {
-        const res = await this.api.post(`/api/cart/items`, req);
+        const res = await this.api.post<CartResponse>(`/api/cart/items`, req);
         return res.data;
     }
 
     // ➤ GET /api/cart
     async getCart(): Promise<CartResponse> {
-        const res = await this.api.get(`/cart`);
-        console.log(res);
+        const res = await this.api.get<CartResponse>(`/cart`);
         return res.data;
     }
 
     // ➤ PUT /api/cart/items/{ticketTypeId}
     async updateCartItem(ticketTypeId: number, quantity: number): Promise<CartResponse> {
-        const res = await this.api.put(`/api/cart/items/${ticketTypeId}`, { quantity });
+        const res = await this.api.put<CartResponse>(`/api/cart/items/${ticketTypeId}`, { quantity });
         return res.data;
     }
 
     // ➤ DELETE /api/cart/items/{ticketTypeId}
     async removeCartItem(ticketTypeId: number): Promise<CartResponse> {
-        const res = await this.api.delete(`/api/cart/items/${ticketTypeId}`);
+        const res = await this.api.delete<CartResponse>(`/api/cart/items/${ticketTypeId}`);
         return res.data;
     }
 
@@ -68,7 +67,7 @@ export class CartService {
 
     // ➤ POST /api/cart/promo?code=XXXX
     async applyPromoCode(promoCode: string): Promise<CartResponse> {
-        const res = await this.api.post(`/api/cart/promo`, null, {
+        const res = await this.api.post<CartResponse>(`/api/cart/promo`, null, {
             params: { code: promoCode }
         });
         return res.data;
@@ -76,7 +75,7 @@ export class CartService {
 
     // ➤ POST /api/cart/promo?code=
     async removePromoCode(): Promise<CartResponse> {
-        const res = await this.api.post(`/api/cart/promo`, null, {
+        const res = await this.api.post<CartResponse>(`/api/cart/promo`, null, {
             params: { code: "" }
         });
         return res.data;

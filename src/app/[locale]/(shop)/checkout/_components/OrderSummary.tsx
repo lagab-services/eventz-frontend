@@ -22,7 +22,7 @@ const OrderSummary = () => {
         setAppliedPromoCode(code);
         // You might also want to update the cart state with the discount if the API call is successful
         // For example: useCartStore.setState((state) => ({ cart: { ...state.cart, promoCode: code, discount: calculateDiscount(state.cart.subtotal, code) } }));
-        console.log("Promo code applied:", code);
+        console.log("Promo code applied:", appliedPromoCode);
     };
 
     const handleRemovePromoCode = () => {

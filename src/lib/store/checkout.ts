@@ -29,7 +29,7 @@ interface CheckoutState {
     completeStep: (step: CheckoutStep) => void
     updateTicketQuantity: (ticketId: number, quantity: number) => void
     initializeAttendeesFromCart: (cartItems:  CartItemResponse[])  => void
-    updateAttendee: (index:any , attendee: AttendeeInfo) => void
+    updateAttendee: (index:number , attendee: AttendeeInfo) => void
     setCustomerInfo: (info: CustomerInfo) => void
     setPromoDiscount: (discount: number) => void
     setLoading: (loading: boolean) => void

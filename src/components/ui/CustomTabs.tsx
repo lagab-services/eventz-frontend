@@ -8,7 +8,7 @@ import { Tabs as ShadcnTabs, TabsContent, TabsList, TabsTrigger } from "@/compon
 type Tab = {
     title: string;
     value: string;
-    content?: string | React.ReactNode | any;
+    content?: string | React.ReactNode;
 };
 
 export const CustomTabs = ({

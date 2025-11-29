@@ -32,7 +32,7 @@ import {useTranslations} from "next-intl";
 import {createOrder} from "../_lib/actions";
 import {toast} from "sonner";
 import {orderRequestSchema} from "../_lib/validations";
-import {OrderRequest} from "@/types/checkout";
+import {AttendeeInfo, OrderRequest} from "@/types/checkout";
 
 const  buildOrderRequest= (): OrderRequest =>{
     const { customerInfo, attendees } = useCheckoutStore.getState();
@@ -60,8 +60,8 @@ const  buildOrderRequest= (): OrderRequest =>{
         acceptTerms: customerInfo.acceptTerms,
         subscribeNewsletter: customerInfo.subscribeNewsletter ?? false,
 
-        successUrl: "/checkout/thanks",
-        cancelUrl: "/checkout/cancel",
+        successUrl: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/checkout/thanks`,
+        cancelUrl: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/checkout/cancel`,
     };
 }
 
@@ -101,13 +101,13 @@ const RecapForm = () => {
         const key = attendee.ticketTypeId;
         if (!acc[key]) {
             acc[key] = {
-                ticketTypeName: attendee?.ticketTypeName,
+                ticketTypeName: attendee?.ticketTypeName as string,
                 attendees: [],
             };
         }
         acc[key].attendees.push({...attendee, originalIndex: index});
         return acc;
-    }, {} as Record<number, { ticketTypeName: string; attendees: any[] }>);
+    }, {} as Record<number, { ticketTypeName: string; attendees: (AttendeeInfo & { originalIndex: number })[] }>);
 
     // Get label of a custom field
     const getCustomFieldLabel = (fieldName: string, ticketTypeId: number) => {
@@ -121,7 +121,7 @@ const RecapForm = () => {
 
     // Format custom field value
     const formatCustomFieldValue = (
-        value: any,
+        value: unknown,
         fieldName: string,
         ticketTypeId: number
     ) => {
@@ -232,9 +232,9 @@ const RecapForm = () => {
                                                                         variant="secondary"
                                                                         className="text-xs"
                                                                     >
-                                                                        {Object.keys(attendee.customFields).length}{" "}
+                                                                        {Object.keys(attendee.customFields!).length}{" "}
                                                                         {t("attendees.info", {
-                                                                            count: Object.keys(attendee.customFields)
+                                                                            count: Object.keys(attendee.customFields!)
                                                                                 .length,
                                                                         })}
                                                                     </Badge>
@@ -290,7 +290,7 @@ const RecapForm = () => {
                                                                             <div
                                                                                 className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                                                                 {Object.entries(
-                                                                                    attendee.customFields
+                                                                                    attendee.customFields!
                                                                                 ).map(([fieldName, value]) => (
                                                                                     <div
                                                                                         key={fieldName}
@@ -409,7 +409,7 @@ const RecapForm = () => {
                         toast.error(t('order_error'), {id: loadingToast});
                     } else {
                         toast.success(t('order_success'), {id: loadingToast});
-                        window.location.href = data?.checkoutUrl || '/';
+                        globalThis.location.href = data?.checkoutUrl || '/';
                     }
                 }} className="flex-1">
                     {t("buttons.continueToPayment")}

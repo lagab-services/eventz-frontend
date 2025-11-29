@@ -2,6 +2,12 @@
   "HomePage": {
     "title": "Hello world!"
   },
+  "common": {
+    "back": "Back",
+    "next": "Next",
+    "close": "Close",
+    "submit": "Submit"
+  },
   "localeSwitcher": {
     "label": "Langue",
     "locale": "{locale, select, de {Deutsch} en {English} fr {French} other {Unknown}}"

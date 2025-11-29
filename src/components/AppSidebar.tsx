@@ -2,11 +2,10 @@
 
 import * as React from "react";
 import {
-    IconChartBar,
+    IconCalendar,
+    IconChartBar, IconCreditCard,
     IconDashboard,
-    IconFolder,
     IconInnerShadowTop,
-    IconListDetails,
     IconUsers,
 } from "@tabler/icons-react";
 
@@ -22,6 +21,7 @@ import {
     SidebarMenuItem,
     SidebarRail,
 } from "@/components/ui/sidebar";
+import NavOrg from "@/components/features/org/NavOrg";
 
 const data = {
     user: {
@@ -36,9 +36,9 @@ const data = {
             icon: IconDashboard,
         },
         {
-            title: "Lifecycle",
-            url: "#",
-            icon: IconListDetails,
+            title: "Events",
+            url: "/events",
+            icon: IconCalendar,
         },
         {
             title: "Analytics",
@@ -46,12 +46,12 @@ const data = {
             icon: IconChartBar,
         },
         {
-            title: "Projects",
+            title: "Payments",
             url: "#",
-            icon: IconFolder,
+            icon: IconCreditCard,
         },
         {
-            title: "Team",
+            title: "Notifications",
             url: "#",
             icon: IconUsers,
         },
@@ -79,6 +79,7 @@ export const AppSidebar = (props: React.ComponentProps<typeof Sidebar>) => (
             <NavMain items={data.navMain} />
         </SidebarContent>
         <SidebarFooter>
+            <NavOrg />
             <NavUser user={data.user} />
         </SidebarFooter>
         <SidebarRail />

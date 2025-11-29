@@ -50,7 +50,7 @@ const Page = () => {
                     fin
                 </>
         }
-    }, [currentStep]);
+    }, []);
 
     const renderedSteps = useMemo(() => {
         return stepOrder.map((step, index) => {

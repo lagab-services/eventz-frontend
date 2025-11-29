@@ -2,6 +2,8 @@ import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import {CommandMenu} from "@/app/[locale]/(dashboard)/(admin)/_components/CommandMenu";
 import {ModeToggle} from "@/components/layout/ModeToggle";
+import NavOrg from "@/components/features/org/NavOrg";
+import * as React from "react";
 
 const SiteHeader = () => {
     return (
@@ -14,6 +16,7 @@ const SiteHeader = () => {
                 />
                 <CommandMenu/>
                 <div className="ml-auto flex items-center gap-2">
+                    <NavOrg />
                     <ModeToggle/>
                 </div>
             </div>

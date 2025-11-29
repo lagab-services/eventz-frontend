@@ -1,9 +1,9 @@
 "use server";
 
-import {OrderService} from "@/services/OrderService";
+import {OrderRequest} from "@/types/checkout";
 
-export const createOrder = async(input: any) => {
-    const orderService = new OrderService();
+export const createOrder = async(input: OrderRequest) => {
+    //const orderService = new OrderService();
     try {
         console.log("call api to create order with input:", input);
         /* Todo: uncomment when API is ready

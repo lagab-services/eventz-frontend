@@ -32,7 +32,14 @@ export interface Page<T> {
 }
 
 
-export interface SearchUsersParams {
+export interface PaginationParams {
+    page?: number;
+    size?: number;
+    sort?: string;
+}
+
+
+export interface SearchEventsParams {
     keyword?: string;
     page?: number;
     size?: number;

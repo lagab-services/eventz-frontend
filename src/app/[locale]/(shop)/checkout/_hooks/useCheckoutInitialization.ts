@@ -43,7 +43,7 @@ export const useCheckoutInitialization = () => {
         };
 
         initializeCheckout();
-    }, [cart, fetchCart, initializeAttendeesFromCart, attendees.length]);
+    }, [cart, fetchCart, fetchCustomFields, setLoading, initializeAttendeesFromCart, attendees.length]);
 
     return {
         isInitialized: cart !== null && attendees.length > 0,

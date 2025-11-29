@@ -6,8 +6,7 @@ import {Input} from '@/components/ui/input'
 import {cn} from '@/lib/utils'
 import React from "react";
 
-interface PasswordInputProps
-    extends React.ComponentProps<"input"> {}
+type PasswordInputProps = React.ComponentProps<'input'>;
 
 const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(({className, ...props}, ref) => {
     const [showPassword, setShowPassword] = React.useState(false)

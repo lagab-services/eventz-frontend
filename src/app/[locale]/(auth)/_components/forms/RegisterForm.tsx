@@ -10,7 +10,8 @@ import {Button} from "@/components/ui/button";
 import {registerFormSchema, RegisterFormValues} from "@/app/[locale]/(auth)/_lib/validations";
 import {registerUser} from "@/app/[locale]/(auth)/_lib/auth-actions";
 
-interface RegisterFormProps extends React.HTMLAttributes<HTMLDivElement> {
+interface RegisterFormProps{
+    className?: string;
 }
 const RegisterForm = ({className} :RegisterFormProps) => {
     const t = useTranslations('auth');

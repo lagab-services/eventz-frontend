@@ -8,7 +8,8 @@ import {Button} from "@/components/ui/button";
 import {resetPassword} from "@/app/[locale]/(auth)/_lib/auth-actions";
 import {useTranslations} from "next-intl";
 
-interface ResetPasswordFormProps extends React.HTMLAttributes<HTMLDivElement> {
+interface ResetPasswordFormProps {
+    className?: string;
 }
 
 const ResetPasswordForm = ({className}: ResetPasswordFormProps) => {

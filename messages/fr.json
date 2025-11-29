@@ -2,6 +2,12 @@
   "HomePage": {
     "title": "Hello le monde!"
   },
+  "common": {
+    "back": "Précédent",
+    "next": "Suivant",
+    "close": "Fermer",
+    "submit": "Soumettre"
+  },
   "localeSwitcher": {
     "label": "Langue",
     "locale": "{locale, select, de {Allemand} en {Anglais} fr {Français} other {Inconnu}}"
@@ -121,6 +127,10 @@
         "phone": {
           "label": "Téléphone",
           "placeholder": "06 12 34 56 78"
+        },
+        "terms":{
+          "label": "J'accepte les conditions générales de vente *",
+          "description": ""
         }
       },
       "buttons": {

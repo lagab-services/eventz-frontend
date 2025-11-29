@@ -4,14 +4,14 @@ interface RequestConfig extends RequestInit {
 }
 
 interface RequestOptions {
-    data?: any;
+    data?: unknown;
     headers?: Record<string, string>;
-    params?: Record<string, any>;
+    params?: Record<string, unknown>;
     timeout?: number;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
-interface ApiResponse<T = any> {
+interface ApiResponse<T = unknown> {
     data: T;
     status: number;
     statusText: string;
@@ -23,7 +23,7 @@ interface ApiError extends Error {
     status?: number;
     statusText?: string;
     response?: Response;
-    data?: any;
+    data?: unknown;
     code?: string;
 }
 export class APIError extends Error {
@@ -151,7 +151,7 @@ class RestApi {
      * @param {string} endpoint - API endpoint
      * @param {Object} options - Request options
      */
-    async request<T = any>(
+    async request<T = unknown>(
         method: string,
         endpoint: string,
         options: RequestOptions = {}
@@ -213,7 +213,6 @@ class RestApi {
                 error.status = response.status;
                 error.statusText = response.statusText;
                 error.response = response;
-                console.log(response);
 
                 try {
                     error.data = await response.json();
@@ -266,49 +265,49 @@ class RestApi {
     /**
      * GET request
      */
-    get<T = any>(endpoint: string, options: RequestOptions = {}): Promise<ApiResponse<T>> {
+    get<T = unknown>(endpoint: string, options: RequestOptions = {}): Promise<ApiResponse<T>> {
         return this.request<T>('GET', endpoint, options);
     }
 
     /**
      * POST request
      */
-    post<T = any>(endpoint: string, data?: any, options: RequestOptions = {}): Promise<ApiResponse<T>> {
+    post<T = unknown>(endpoint: string, data?: unknown, options: RequestOptions = {}): Promise<ApiResponse<T>> {
         return this.request<T>('POST', endpoint, { ...options, data });
     }
 
     /**
      * PUT request
      */
-    put<T = any>(endpoint: string, data?: any, options: RequestOptions = {}): Promise<ApiResponse<T>> {
+    put<T = unknown>(endpoint: string, data?: unknown, options: RequestOptions = {}): Promise<ApiResponse<T>> {
         return this.request<T>('PUT', endpoint, { ...options, data });
     }
 
     /**
      * PATCH request
      */
-    patch<T = any>(endpoint: string, data?: any, options: RequestOptions = {}): Promise<ApiResponse<T>> {
+    patch<T = unknown>(endpoint: string, data?: unknown, options: RequestOptions = {}): Promise<ApiResponse<T>> {
         return this.request<T>('PATCH', endpoint, { ...options, data });
     }
 
     /**
      * DELETE request
      */
-    delete<T = any>(endpoint: string, options: RequestOptions = {}): Promise<ApiResponse<T>> {
+    delete<T = unknown>(endpoint: string, options: RequestOptions = {}): Promise<ApiResponse<T>> {
         return this.request<T>('DELETE', endpoint, options);
     }
 
     /**
      * HEAD request
      */
-    head<T = any>(endpoint: string, options: RequestOptions = {}): Promise<ApiResponse<T>> {
+    head<T = unknown>(endpoint: string, options: RequestOptions = {}): Promise<ApiResponse<T>> {
         return this.request<T>('HEAD', endpoint, options);
     }
 
     /**
      * OPTIONS request
      */
-    options<T = any>(endpoint: string, options: RequestOptions = {}): Promise<ApiResponse<T>> {
+    options<T = unknown>(endpoint: string, options: RequestOptions = {}): Promise<ApiResponse<T>> {
         return this.request<T>('OPTIONS', endpoint, options);
     }
 }

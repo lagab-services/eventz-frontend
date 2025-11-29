@@ -26,6 +26,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { useTranslations } from "next-intl";
+import {Checkbox} from "@/components/ui/checkbox";
+import {Label} from "@/components/ui/label";
 
 const CustomerInfoForm = () => {
     const t = useTranslations("checkout.customerInfo");
@@ -130,6 +132,31 @@ const CustomerInfoForm = () => {
                                     </FormItem>
                                 )}
                             />
+
+                            <FormField
+                                control={form.control}
+                                name="acceptTerms"
+                                render={({field}) => (
+                                    <FormItem>
+
+                                        <FormControl>
+                                            <div className="flex items-start gap-3">
+                                                <Checkbox id="acceptTerms"  checked={field.value}
+                                                          onCheckedChange={field.onChange} />
+                                                <div className="grid gap-2">
+                                                    <Label htmlFor="acceptTerms">{t("fields.terms.label")}</Label>
+                                                    <p className="text-muted-foreground text-sm">
+                                                        {t("fields.terms.description")}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </FormControl>
+
+                                        <FormMessage/>
+                                    </FormItem>
+                                )}
+                            />
+
 
                             <div className="flex flex-col sm:flex-row gap-4 pt-6 justify-between">
                                 <Button

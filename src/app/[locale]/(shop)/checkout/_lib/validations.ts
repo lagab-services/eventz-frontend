@@ -5,7 +5,7 @@ export const customerInfoSchema = z.object({
     lastName: z.string().min(1, "Le nom est requis"),
     email: z.email("Format d'email invalide"),
     phone: z.string().optional(),
-    acceptTerms: z.boolean(),
+    acceptTerms: z.literal(true,"Vous devez accepter les conditions." ),
 });
 
 export type CustomerInfo = z.infer<typeof customerInfoSchema>
