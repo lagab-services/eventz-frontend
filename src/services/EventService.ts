@@ -1,6 +1,7 @@
 import {apiClient, RestApi} from "@/lib/httpClient";
 import {Page, PaginationParams} from "@/types/page";
 import {EventSearchParams, Event, EventSummary} from "@/types/events";
+import {CustomField} from "@/types/customFields";
 
 export class EventService {
     private readonly api: RestApi;
@@ -152,6 +153,23 @@ export class EventService {
     // ➤ GET /api/v1/events/organizer/{organizerId}/count
     async countEventsByOrganizer(organizerId: number): Promise<number> {
         const res = await this.api.get<number>(`/api/v1/events/organizer/${organizerId}/count`);
+        return res.data;
+    }
+
+    // ➤ GET /api/v1/custom-fields/event/{eventId}
+    async getEventCustomFields(eventId: number): Promise<CustomField[]> {
+        const res = await this.api.get<CustomField[]>(`/api/v1/custom-fields/event/${eventId}`);
+        return res.data;
+    }
+
+    // ➤ GET /api/v1/custom-fields/event/{eventId}/ticket-type/{ticketTypeId}
+    async getCustomFieldsForTicketType(
+        eventId: number,
+        ticketTypeId: number
+    ): Promise<CustomField[]> {
+        const res = await this.api.get<CustomField[]>(
+            `/api/v1/custom-fields/event/${eventId}/ticket-type/${ticketTypeId}`
+        );
         return res.data;
     }
 

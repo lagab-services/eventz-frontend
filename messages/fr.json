@@ -86,6 +86,7 @@
     "checkout_error": "Veuillez corriger les erreurs avant de continuer"
   },
   "checkout": {
+    "backToEvent": "Retour à l'événement",
     "attendee": {
       "title": "Informations des participants",
       "description": "Renseignez les informations pour chaque participant ({completed}/{total} {completed, plural,=1 {complété} other {complétés}})",
@@ -147,7 +148,11 @@
       "appliedTitle": "Code promo appliqué !",
       "appliedDescription": "Le code \"{code}\" a été appliqué avec succès.",
       "removedTitle": "Code promo retiré",
-        "removedDescription": "Le code \"{code}\" a été retiré avec succès."
+      "removedDescription": "Le code \"{code}\" a été retiré avec succès.",
+      "applyErrorTitle": "Échec de l'application",
+      "applyErrorDescription": "Une erreur est survenue lors de l'application du code promo.",
+      "unapplyErrorTitle": "Échec de la suppression",
+      "unapplyErrorDescription": "Une erreur est survenue lors de la suppression du code promo. Veuillez réessayer."
     },
     "orderSummary": {
       "title": "Récapitulatif",
@@ -198,10 +203,19 @@
         "phone": "Téléphone",
         "newsletter": "Inscrit à la newsletter"
       },
+      "percent": {
+        "title": "Des Économies vous attendent",
+        "description": "Saisissez votre code pour appliquer la remise"
+      },
       "buttons": {
         "back": "Retour",
         "continueToPayment": "Continuer vers le paiement"
-      }
-    }
+      },
+      "order_loading": "Traitement de votre commande...",
+      "order_error": "Une erreur est survenue lors du traitement de la commande",
+      "order_success": "Votre commande a été validée avec succès"
+    },
+    "redirect_in_progress": "Redirection en cours...",
+    "redirect_auto_message": "Vous allez être redirigé automatiquement dans quelques instants"
   }
 }

@@ -78,7 +78,9 @@ export const CustomFieldRenderer = <TFormValues extends Record<string, unknown>>
                 );
 
             case 'SELECT': {
-                const options = customField.fieldOptions?.split(',').map(opt => opt.trim()) || [];
+                const options = customField.fieldOptions
+                    ? JSON.parse(customField.fieldOptions).map((opt: string) => opt.trim())
+                    : [];
                 return (
                     <FormField
                         control={form.control}
@@ -97,7 +99,7 @@ export const CustomFieldRenderer = <TFormValues extends Record<string, unknown>>
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent>
-                                        {options.map((option) => (
+                                        {options.map((option: string) => (
                                             <SelectItem key={option} value={option}>
                                                 {option}
                                             </SelectItem>

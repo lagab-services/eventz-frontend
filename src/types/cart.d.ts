@@ -28,6 +28,7 @@ export interface CartResponse {
     isValid: boolean;
     warnings: CartMessage[];
     errors: CartMessage[];
+    session: string;
 }
 
 export interface AddToCartRequest {

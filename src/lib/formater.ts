@@ -1,4 +1,5 @@
 import {Address} from "@/types/events";
+import {slugify} from "@/lib/utils";
 
 export const formatAddress = (address: Address): string => {
     const parts = [
@@ -10,3 +11,6 @@ export const formatAddress = (address: Address): string => {
 
     return parts.join(', ');
 };
+
+export const formatEventUrl = (eventTitle: string, eventId: number | string): string =>
+    `/${slugify(eventTitle)}_E${eventId}`;

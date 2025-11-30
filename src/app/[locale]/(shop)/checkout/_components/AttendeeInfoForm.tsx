@@ -6,7 +6,7 @@ import {  Mail, ArrowRight, ArrowLeft, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { useCheckoutStore } from "@/lib/store/checkout";
+import { useCheckoutStore } from "@/store/checkout";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { Badge } from "@/components/ui/badge";

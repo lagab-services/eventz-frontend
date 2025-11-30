@@ -6,11 +6,23 @@ import {OrderResponse} from "@/types/order";
 export class OrderService {
     private readonly api: RestApi;
 
-    constructor(token?: string) {
+    constructor(token?: string, customHeader?: Record<string, string>) {
         this.api = apiClient;
+
         if (token) {
             this.api.setAuth(token);
         }
+        if (customHeader) {
+            this.api.setHeaders(customHeader);
+        }
+    }
+
+    static fromAccessAndSession(accessToken?: string, sessionToken?: string) {
+        return new OrderService(accessToken, sessionToken ? { 'X-Session-Token': sessionToken } : undefined);
+    }
+
+    static fromToken(token: string) {
+        return new OrderService(undefined, { 'X-Session-Token': token });
     }
 
     // ➤ POST /api/orders/checkout

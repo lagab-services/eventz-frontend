@@ -18,7 +18,7 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
-import { useCheckoutStore } from "@/lib/store/checkout";
+import { useCheckoutStore } from "@/store/checkout";
 import {
     CustomerInfo,
     customerInfoSchema,
@@ -52,7 +52,7 @@ const CustomerInfoForm = () => {
                     <CardDescription>{t("description")}</CardDescription>
                 </CardHeader>
 
-                <CardContent>
+                <CardContent  className="px-0 md:px-6">
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

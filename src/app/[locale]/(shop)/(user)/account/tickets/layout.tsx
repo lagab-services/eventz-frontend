@@ -10,11 +10,6 @@ const TicketsLayout = ({children}: { children: ReactNode }) => {
             url : 'account/tickets/',
         },
         {
-            name: 'Pending',
-            value: 'pending',
-            url : 'account/tickets/pending',
-        },
-        {
             name: 'Past',
             value: 'past',
             url : 'account/tickets/past',

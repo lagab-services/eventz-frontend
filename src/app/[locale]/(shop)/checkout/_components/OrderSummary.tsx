@@ -2,34 +2,37 @@
 import React from 'react';
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import {Separator} from "@/components/ui/separator";
-import {useCartStore} from "@/lib/store/cart";
+import {useCartStore} from "@/store/cart";
 import {Loader2, ShoppingCart, Tag, ChevronDown, ChevronUp} from "lucide-react";
 import {Badge} from "@/components/ui/badge";
 import {Button} from "@/components/ui/button";
 import {cn} from "@/lib/utils";
 import {useTranslations} from "next-intl";
 import {PromoCodeInput} from "./PromoCodeInput";
+import {applyPromoCodeAction, removePromoCodeAction} from "@/actions/cart.actions";
+import {useCheckoutStore} from "@/store/checkout";
 
 const OrderSummary = () => {
 
-    const cart = useCartStore((state) => state.cart);
+    const {cart, setCart} = useCartStore();
+    const {sessionId} = useCheckoutStore();
     const [isExpanded, setIsExpanded] = React.useState(false);
     const t = useTranslations('checkout.orderSummary');
 
-    const [appliedPromoCode, setAppliedPromoCode] = React.useState<string | null>(null);
-
-    const handleApplyPromoCode = (code: string) => {
-        setAppliedPromoCode(code);
-        // You might also want to update the cart state with the discount if the API call is successful
-        // For example: useCartStore.setState((state) => ({ cart: { ...state.cart, promoCode: code, discount: calculateDiscount(state.cart.subtotal, code) } }));
-        console.log("Promo code applied:", appliedPromoCode);
+    const handleApplyPromoCode = async (code: string) => {
+        const result = await applyPromoCodeAction(code,sessionId);
+        if (!result.success) {
+            throw new Error(result.error);
+        }
+        setCart(result.data);
     };
 
-    const handleRemovePromoCode = () => {
-        setAppliedPromoCode(null);
-        // You might also want to update the cart state to remove the discount
-        // For example: useCartStore.setState((state) => ({ cart: { ...state.cart, promoCode: null, discount: 0 } }));
-        console.log("Promo code removed");
+    const handleRemovePromoCode = async () => {
+        const result = await removePromoCodeAction(sessionId);
+        if (!result.success) {
+            throw new Error(result.error);
+        }
+        setCart(result.data);
     };
 
     if (!cart) {
@@ -64,7 +67,7 @@ const OrderSummary = () => {
     }, {} as Record<string, typeof cart.items>);
 
     return (
-        <Card className="sticky top-6 border-0 shadow-none w-full bg-transparent">
+        <Card className="sticky top-6 border-0 shadow-none w-full bg-transparent pt-0 md:py-6">
             <CardHeader>
                 <div className="flex items-center justify-between">
                     <CardTitle className="flex items-center gap-2">
@@ -131,10 +134,12 @@ const OrderSummary = () => {
                     ))}
                 </div>
 
-                <PromoCodeInput onApply={handleApplyPromoCode}
-                                initialPromoCode={cart.promoCode || null}
-                                onRemove={handleRemovePromoCode}/>
-                <Separator/>
+                <div className="hidden md:flex flex-col gap-3">
+                    <PromoCodeInput onApply={handleApplyPromoCode}
+                                    initialPromoCode={cart.promoCode || null}
+                                    onRemove={handleRemovePromoCode}/>
+                    <Separator/>
+                </div>
 
                 {/* Price details */}
                 <div className="space-y-2">

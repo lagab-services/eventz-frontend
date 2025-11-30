@@ -19,4 +19,12 @@ export const auth = betterAuth({
             clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
         },
     },
+    user:{
+        additionalFields: {
+            accessToken: {
+                type: "string",
+                input: false
+            }
+        }
+    }
 });

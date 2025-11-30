@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import {stepOrder, useCheckoutStore} from "@/lib/store/checkout";
+import {stepOrder, useCheckoutStore} from "@/store/checkout";
 import {NavbarLogo} from "@/components/ui/resizable-navbar";
 import Footer from "@/components/layout/Footer";
 
@@ -14,9 +14,9 @@ const Layout = ({children}: CheckoutLayoutProps) => {
     const currentIndex = stepOrder.indexOf(currentStep);
     const progress = ((currentIndex + 1) / totalSteps) * 100;
     return (
-        <div className="min-h-screen flex flex-col bg-app2">
+        <div className="min-h-screen flex flex-col">
             <header
-                className="bg-background py-3 flex flex-col md:flex-row items-center justify-between w-full sticky top-0 z-30 border-b">
+                className="bg-background md:py-3 flex flex-col md:flex-row items-center justify-between w-full sticky top-0 z-30 border-b">
                 <div className="py-1 md:pl-4 mb-1 md:mb-0">
                     <NavbarLogo/>
                 </div>

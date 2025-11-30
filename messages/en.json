@@ -86,6 +86,7 @@
     "checkout_error": "Please fix errors before proceeding"
   },
   "checkout": {
+    "backToEvent": "Back to event",
     "attendee": {
       "title": "Attendee Information",
       "description": "Provide information for each attendee ({completed}/{total} {completed, plural,=1 {completed} other {completed}})",
@@ -143,7 +144,11 @@
       "appliedTitle": "Promo code applied!",
       "appliedDescription": "The code \"{code}\" has been successfully applied.",
       "removedTitle": "Promo code removed",
-      "removedDescription": "The code \"{code}\" has been removed from your order."
+      "removedDescription": "The code \"{code}\" has been removed from your order.",
+      "applyErrorTitle": "Application Failed",
+      "applyErrorDescription": "An error occurred while applying the promo code.",
+      "unapplyErrorTitle": "Removal Failed",
+      "unapplyErrorDescription": "An error occurred while removing the promo code. Please try again."
     },
     "orderSummary": {
       "title": "Order Summary",
@@ -194,10 +199,19 @@
         "phone": "Phone",
         "newsletter": "Subscribed to Newsletter"
       },
+      "percent": {
+        "title": "Savings await you",
+        "description": "Enter your code to apply the discount"
+      },
       "buttons": {
         "back": "Back",
         "continueToPayment": "Proceed to Payment"
-      }
-    }
+      },
+      "order_loading": "Processing your order...",
+      "order_error": "An error occurred with your order",
+      "order_success": "Your order has been confirmed"
+    },
+    "redirect_in_progress": "Redirecting...",
+    "redirect_auto_message": "You will be redirected automatically in few seconds"
   }
 }

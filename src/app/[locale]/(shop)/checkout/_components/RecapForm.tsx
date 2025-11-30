@@ -10,9 +10,9 @@ import {
     Phone,
     ChevronDown,
     ChevronUp,
-    Edit,
+    Edit, Percent,
 } from "lucide-react";
-import {useCheckoutStore} from "@/lib/store/checkout";
+import {useCheckoutStore} from "@/store/checkout";
 import {
     Card,
     CardContent,
@@ -29,13 +29,17 @@ import {
 } from "@/components/ui/collapsible";
 import {cn} from "@/lib/utils";
 import {useTranslations} from "next-intl";
-import {createOrder} from "../_lib/actions";
+import {createOrder} from "../_lib/order.actions";
 import {toast} from "sonner";
 import {orderRequestSchema} from "../_lib/validations";
 import {AttendeeInfo, OrderRequest} from "@/types/checkout";
+import {PromoCodeInput} from "@/app/[locale]/(shop)/checkout/_components/PromoCodeInput";
+import {useCartStore} from "@/store/cart";
+import {applyPromoCodeAction, removePromoCodeAction} from "@/actions/cart.actions";
+import {authClient} from "@/lib/auth/auth-client";
 
-const  buildOrderRequest= (): OrderRequest =>{
-    const { customerInfo, attendees } = useCheckoutStore.getState();
+const buildOrderRequest = (): OrderRequest => {
+    const {customerInfo, attendees} = useCheckoutStore.getState();
 
     return {
         billingName: `${customerInfo.firstName} ${customerInfo.lastName}`,
@@ -66,7 +70,7 @@ const  buildOrderRequest= (): OrderRequest =>{
 }
 
 
-const  buildValidatedOrderRequest = (): OrderRequest =>{
+const buildValidatedOrderRequest = (): OrderRequest => {
     const order = buildOrderRequest();
 
     const parsed = orderRequestSchema.safeParse(order);
@@ -83,10 +87,30 @@ const  buildValidatedOrderRequest = (): OrderRequest =>{
 const RecapForm = () => {
     const t = useTranslations("checkout.recap");
 
-    const {customerInfo, attendees, customFields, previousStep, nextStep} =
+    const {customerInfo, attendees, customFields, previousStep, nextStep, sessionId} =
         useCheckoutStore();
 
     const [expandedAttendees, setExpandedAttendees] = React.useState<number[]>([]);
+    const {cart, setCart} = useCartStore();
+    const {
+        data: session,
+    } = authClient.useSession();
+
+    const handleApplyPromoCode = async (code: string) => {
+        const result = await applyPromoCodeAction(code,sessionId);
+        if (!result.success) {
+            throw new Error(result.error);
+        }
+        setCart(result.data);
+    };
+
+    const handleRemovePromoCode = async () => {
+        const result = await removePromoCodeAction(sessionId);
+        if (!result.success) {
+            throw new Error(result.error);
+        }
+        setCart(result.data);
+    };
 
     const toggleAttendee = (index: number) => {
         setExpandedAttendees((prev) =>
@@ -144,7 +168,7 @@ const RecapForm = () => {
     };
 
     return (
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-4xl mx-auto py-8">
             <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
                 <ListTodo className="w-8 h-8 text-primary"/>
             </div>
@@ -159,7 +183,7 @@ const RecapForm = () => {
             <div className="space-y-6">
                 {/* Attendees information */}
                 <Card className="border-0 shadow-none">
-                    <CardHeader>
+                    <CardHeader className="px-0">
                         <div className="flex items-center gap-3">
                             <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
                                 <Users className="w-5 h-5 text-primary"/>
@@ -172,7 +196,7 @@ const RecapForm = () => {
                             </div>
                         </div>
                     </CardHeader>
-                    <CardContent className="space-y-4">
+                    <CardContent className="space-y-4 px-0">
                         {Object.entries(attendeesByTicketType).map(
                             ([ticketTypeId, group]) => (
                                 <div key={ticketTypeId} className="space-y-3">
@@ -330,7 +354,7 @@ const RecapForm = () => {
 
                 {/* Customer info */}
                 <Card className="border-0 shadow-none">
-                    <CardHeader>
+                    <CardHeader className="px-0">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-3">
                                 <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
@@ -351,7 +375,7 @@ const RecapForm = () => {
                             </Button>
                         </div>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="px-0">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-1">
                                 <p className="text-sm font-medium text-gray-500">
@@ -392,6 +416,28 @@ const RecapForm = () => {
                         )}
                     </CardContent>
                 </Card>
+                {/* Discount */}
+                <Card className="border-0 shadow-none">
+                    <CardHeader className="px-0">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                                <Percent className="w-5 h-5 text-primary"/>
+                            </div>
+                            <div>
+                                <CardTitle className="text-lg">
+                                    {t("percent.title")}
+                                </CardTitle>
+                                <CardDescription>{t("percent.description")}</CardDescription>
+                            </div>
+                        </div>
+                    </CardHeader>
+                    <CardContent className="space-y-4 px-0 md:px-6">
+                        <PromoCodeInput onApply={handleApplyPromoCode}
+                                        initialPromoCode={cart?.promoCode || null}
+                                        onRemove={handleRemovePromoCode}/>
+                    </CardContent>
+                </Card>
+                <Separator/>
             </div>
 
             {/* Action buttons */}
@@ -399,13 +445,13 @@ const RecapForm = () => {
                 <Button variant="outline" className="flex-1" onClick={previousStep}>
                     {t("buttons.back")}
                 </Button>
-                <Button onClick={async ()=>{
+                <Button onClick={async () => {
                     const loadingToast = toast.loading(t('order_loading'));
 
                     nextStep();
                     const order = buildValidatedOrderRequest();
-                    const {data, error} = await createOrder(order);
-                    if(error) {
+                    const {data, error} = await createOrder(order,sessionId,session?.user?.accessToken as string);
+                    if (error) {
                         toast.error(t('order_error'), {id: loadingToast});
                     } else {
                         toast.success(t('order_success'), {id: loadingToast});

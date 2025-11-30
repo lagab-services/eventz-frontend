@@ -12,6 +12,7 @@ export async function addToCartAction(
     request: AddToCartRequest
 ): Promise<ActionResponse<CartResponse>> {
     try {
+
         const cartService = await CartService.fromCookie();
         const cart = await cartService.addToCart(request);
         revalidatePath('/checkout'); // Revalidate the checkout page
@@ -21,6 +22,20 @@ export async function addToCartAction(
         return {
             success: false,
             error: error instanceof Error ? error.message : 'Failed to add to cart',
+        };
+    }
+}
+
+export async function getCart(sessionId: string): Promise<ActionResponse<CartResponse>> {
+    try {
+        const cartService = CartService.fromToken(sessionId);
+        const cart = await cartService.getCart();
+        return {success: true, data: cart};
+    } catch (error) {
+        console.error('NotFound fetching cart:', error);
+        return {
+            success: false,
+            error: error instanceof Error ? error.message : 'Failed to fetch cart',
         };
     }
 }
@@ -90,10 +105,11 @@ export async function clearCartAction(): Promise<ActionResponse<void>> {
 }
 
 export async function applyPromoCodeAction(
-    promoCode: string
+    promoCode: string,
+    sessionId: string
 ): Promise<ActionResponse<CartResponse>> {
     try {
-        const cartService = await CartService.fromCookie();
+        const cartService = CartService.fromToken(sessionId);
         const cart = await cartService.applyPromoCode(promoCode);
         revalidatePath('/checkout');
         return {success: true, data: cart};
@@ -106,9 +122,9 @@ export async function applyPromoCodeAction(
     }
 }
 
-export async function removePromoCodeAction(): Promise<ActionResponse<CartResponse>> {
+export async function removePromoCodeAction(sessionId: string): Promise<ActionResponse<CartResponse>> {
     try {
-        const cartService = await CartService.fromCookie();
+        const cartService = CartService.fromToken(sessionId);
         const cart = await cartService.removePromoCode();
         revalidatePath('/checkout');
         return {success: true, data: cart};

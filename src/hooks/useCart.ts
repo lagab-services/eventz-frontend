@@ -12,7 +12,7 @@ import {
     applyPromoCodeAction,
     removePromoCodeAction,
 } from '@/actions/cart.actions';
-import { useCartStore } from '@/lib/store/cart';
+import { useCartStore } from '@/store/cart';
 
 export const useCart = () => {
     const router = useRouter();
@@ -141,7 +141,7 @@ export const useCart = () => {
         async (promoCode: string) => {
             try {
                 setLoading(true);
-                const result = await applyPromoCodeAction(promoCode);
+                const result = await applyPromoCodeAction(promoCode,'');
 
                 if (!result.success) {
                     throw new Error(result.error);
@@ -166,7 +166,7 @@ export const useCart = () => {
     const removePromoCode = useCallback(async () => {
         try {
             setLoading(true);
-            const result = await removePromoCodeAction();
+            const result = await removePromoCodeAction('');
 
             if (!result.success) {
                 throw new Error(result.error);
@@ -211,10 +211,12 @@ export const useCart = () => {
     const goToCheckout = useCallback(
         async (request: AddToCartRequest) => {
             try {
+                await clearCartAction();
+
                 const cartResponse = await addToCart(request);
 
                 if (cartResponse.isValid && cartResponse.errors.length === 0) {
-                    router.push(`/checkout`);
+                    router.push(`/checkout/${cartResponse.session}`);
                 } else {
                     toast.error(t('checkout_error'));
                 }

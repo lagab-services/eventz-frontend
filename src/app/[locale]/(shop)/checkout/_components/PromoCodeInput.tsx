@@ -13,8 +13,8 @@ interface PromoCodeFormValues {
 }
 
 interface PromoCodeInputProps {
-    onApply: (code: string) => void;
-    onRemove: () => void;
+    onApply: (code: string) => Promise<void>;
+    onRemove: () => Promise<void>;
     initialPromoCode: string | null;
 }
 
@@ -30,21 +30,31 @@ export function PromoCodeInput({onApply, onRemove, initialPromoCode}: PromoCodeI
         }
     }, [initialPromoCode, setValue]);
 
-    const onSubmit = (data: PromoCodeFormValues) => {
+    const onSubmit = async (data: PromoCodeFormValues) => {
         if (data.promoCode && data.promoCode !== initialPromoCode) {
-            onApply(data.promoCode);
-            toast.success(t("appliedTitle"), {
-                description: t("appliedDescription", {code: data.promoCode}),
-            });
-            // Keep the input value after applying
-            // reset(); // Removed reset to keep the applied code in the input
+            try {
+                await onApply(data.promoCode);
+                toast.success(t("appliedTitle"), {
+                    description: t("appliedDescription", {code: data.promoCode}),
+                });
+            } catch {
+                toast.error(t("applyErrorTitle"), {
+                    description: t("applyErrorDescription", {code: data.promoCode}),
+                });
+            }
         } else if (!data.promoCode && initialPromoCode) {
             // If the input is cleared and there was an initial code, trigger removal
-            onRemove();
-            toast.success(t("removedTitle"), {
-                description: t("removedDescription", {code: initialPromoCode}),
-            });
-            reset(); // Reset after removal
+            try {
+                await onRemove();
+                toast.success(t("removedTitle"), {
+                    description: t("removedDescription", {code: initialPromoCode}),
+                });
+                reset(); // Reset after removal
+            } catch {
+                toast.error(t("unapplyErrorTitle"), {
+                    description: t("unapplyErrorDescription", {code: data.promoCode}),
+                });
+            }
         } else if (!data.promoCode && !initialPromoCode) {
             // If input is empty and there was no initial code, do nothing or show a message
             toast.info(t("noCodeEntered"));

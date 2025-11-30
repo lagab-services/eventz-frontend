@@ -1,9 +1,10 @@
 import {AttendeeInfo, CheckoutStep, CustomerInfo} from "@/types/checkout";
 import {create} from "zustand";
-import {persist} from "zustand/middleware";
+import {createJSONStorage, persist} from "zustand/middleware";
 import {TicketType} from "@/types/events";
 import {CartItemResponse} from "@/types/cart";
 import {CustomField} from "@/types/customFields";
+import {getCustomFields} from "@/actions/customfield.actions";
 
 interface CheckoutState {
     // Step management
@@ -23,6 +24,8 @@ interface CheckoutState {
 
     // Loading states
     isLoading: boolean
+    _hasHydrated: boolean
+    sessionId: string
 
     // Actions
     setCurrentStep: (step: CheckoutStep) => void
@@ -38,6 +41,8 @@ interface CheckoutState {
     reset: () => void
     setCustomFields: (fields: CustomField[]) => void
     fetchCustomFields: (eventId: number) => Promise<void>
+    setHasHydrated: (_hasHydrated: boolean) => void
+    setSessionId: (sessionId: string) => void
 }
 
 export const stepOrder: CheckoutStep[] = ['tickets', 'info', 'payment', 'confirmation']
@@ -60,8 +65,11 @@ export const useCheckoutStore = create<CheckoutState>()(
             },
             promoDiscount: 0,
             isLoading: true,
+            _hasHydrated: false,
+            sessionId: '',
 
             // Actions
+            setSessionId: (sessionId) => set({ sessionId: sessionId }),
             setCurrentStep: (step) => set({ currentStep: step }),
 
             completeStep: (step) => set((state) => ({
@@ -144,25 +152,30 @@ export const useCheckoutStore = create<CheckoutState>()(
                 },
                 promoDiscount: 0,
                 isLoading: false,
+                sessionId: '',
             }),
             setCustomFields: (fields) => set({ customFields: fields }),
 
             fetchCustomFields: async (eventId: number) => {
                 try {
                     set({ isLoading: true });
-                    const response = await fetch(`http://localhost:4000/customFields?eventId=${eventId}`);
-                    if (!response.ok) throw new Error('Failed to fetch custom fields');
-                    const fields = await response.json();
-                    set({ customFields: fields });
+                    const response = await getCustomFields(eventId);
+                    if (!response.success) throw new Error('Failed to fetch custom fields');
+                    set({ customFields: response.data });
                 } catch (error) {
                     console.error('NotFound fetching custom fields:', error);
                 } finally {
                     set({ isLoading: false });
                 }
             },
+            setHasHydrated: (state: boolean) => set({ _hasHydrated: state }),
         }),
         {
             name: 'checkout-store',
+            storage: createJSONStorage(() => sessionStorage),
+            onRehydrateStorage: (state) => {
+                return () => state.setHasHydrated(true);
+            }
         }
     )
 );
