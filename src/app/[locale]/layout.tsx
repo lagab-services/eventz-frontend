@@ -3,7 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import {NextIntlClientProvider} from "next-intl";
 import {Toaster} from "@/components/ui/sonner";
-import NextAuthProvider from "@/providers/NextAuthProvider";
 import {ThemeProvider} from "@/components/layout/ThemeProvider";
 import {NuqsAdapter} from "nuqs/adapters/next";
 
@@ -33,7 +32,6 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <NextIntlClientProvider>
-            <NextAuthProvider>
                 <ThemeProvider
                 attribute="class"
                 defaultTheme="system"
@@ -42,7 +40,6 @@ export default function RootLayout({
                 >
                     <NuqsAdapter>{children}</NuqsAdapter>
                 </ThemeProvider>
-            </NextAuthProvider>
         </NextIntlClientProvider>
         <Toaster />
       </body>

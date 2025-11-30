@@ -1,6 +1,4 @@
 import {apiClient, RestApi} from "@/lib/httpClient";
-import {getServerSession, Session} from "next-auth";
-import {authOptions} from "@/app/api/auth/[...nextauth]/route";
 import {CheckoutResponse, OrderRequest, TrackOrderRequest} from "@/types/checkout";
 import {Page} from "@/types/page";
 import {OrderResponse} from "@/types/order";
@@ -13,12 +11,6 @@ export class OrderService {
         if (token) {
             this.api.setAuth(token);
         }
-    }
-
-    static async fromSession(session?: Session | null) {
-        session ??= await getServerSession(authOptions);
-        const token = session?.user.accessToken;
-        return new OrderService(token);
     }
 
     // ➤ POST /api/orders/checkout

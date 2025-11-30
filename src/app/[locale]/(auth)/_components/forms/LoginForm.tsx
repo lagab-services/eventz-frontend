@@ -16,7 +16,7 @@ import {toast} from "sonner";
 import {userLoginSchema} from "@/app/[locale]/(auth)/_lib/validations";
 import {useTranslations} from "next-intl";
 import Link from "next/link";
-import {signIn} from "next-auth/react";
+import {authClient} from "@/lib/auth/auth-client";
 
 interface UserAuthFormProps  {
     className?: string;
@@ -42,7 +42,7 @@ const UserAuthForm = ({className}: UserAuthFormProps) => {
 
     async function onSubmit(data: FormData) {
 
-        setIsLoading(true)
+        /*setIsLoading(true)
         const signInResult = await signIn('credentials', {
             redirect: false,
             email: data.email.toLowerCase(),
@@ -56,8 +56,14 @@ const UserAuthForm = ({className}: UserAuthFormProps) => {
             return toast.success(t('login_success'));
         }
 
-        return toast.error(t('login_error'));
+        return toast.error(t('login_error'));*/
     }
+
+    const handleLogin =  async () => {
+        await authClient.signIn.social({
+            provider: "google",
+        });
+    };
 
     return (
         <div className={cn("grid gap-6", className)}>
@@ -132,8 +138,8 @@ const UserAuthForm = ({className}: UserAuthFormProps) => {
                 type="button"
                 className={cn(buttonVariants({variant: "outline"}))}
                 onClick={() => {
-                    setIsGoogleLoading(true)
-                     signIn("google", {callbackUrl: redirect})
+                    setIsGoogleLoading(true);
+                    handleLogin();
                 }}
                 disabled={isLoading || isGoogleLoading}
             >

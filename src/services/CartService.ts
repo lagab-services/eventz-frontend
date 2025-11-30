@@ -2,8 +2,6 @@ import 'server-only';
 import { AddToCartRequest, CartResponse } from '@/types/cart';
 import { cookies } from 'next/headers';
 import { apiClient, RestApi } from "@/lib/httpClient";
-import { getServerSession, Session } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 export class CartService {
     private readonly api: RestApi;
@@ -30,11 +28,6 @@ export class CartService {
         return new CartService();
     }
 
-    static async fromSession(session?: Session | null) {
-        session ??= await getServerSession(authOptions);
-        const token = session?.user.accessToken;
-        return new CartService(token);
-    }
 
     // ➤ POST /api/cart/items
     async addToCart(req: AddToCartRequest): Promise<CartResponse> {
