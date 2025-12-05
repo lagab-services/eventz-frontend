@@ -14,6 +14,7 @@ const TicketsPage = () => {
         venueCity: "Lille",
         venueCountry: "France",
         buyerName: "Ladislas Gabriel",
+        buyerEmail: "",
         ticketType: "VIP",
         ticketNumber: "A74293",
         qrCode: "base64string",

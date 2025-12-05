@@ -9,6 +9,7 @@ export interface Ticket {
     venueCity: string;
     venueCountry: string;
     buyerName: string;
+    buyerEmail: string;
     ticketType: string;
     ticketNumber: string;
     qrCode: string;

@@ -1,7 +1,7 @@
 import {apiClient, RestApi} from "@/lib/httpClient";
 import {CheckoutResponse, OrderRequest, TrackOrderRequest} from "@/types/checkout";
 import {Page} from "@/types/page";
-import {OrderResponse} from "@/types/order";
+import {OrderResponse, OrderWithTickets} from "@/types/order";
 
 export class OrderService {
     private readonly api: RestApi;
@@ -78,8 +78,8 @@ export class OrderService {
 
     async trackGuestOrder(
         request: TrackOrderRequest
-    ): Promise<OrderResponse> {
-        const res = await this.api.post<OrderResponse>("/api/guest/orders/track", request);
+    ): Promise<OrderWithTickets> {
+        const res = await this.api.post<OrderWithTickets>("/api/guest/orders/track", request);
         return res.data;
     }
 

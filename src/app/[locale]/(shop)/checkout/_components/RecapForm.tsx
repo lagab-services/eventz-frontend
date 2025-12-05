@@ -64,8 +64,8 @@ const buildOrderRequest = (): OrderRequest => {
         acceptTerms: customerInfo.acceptTerms,
         subscribeNewsletter: customerInfo.subscribeNewsletter ?? false,
 
-        successUrl: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/checkout/thanks`,
-        cancelUrl: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/checkout/cancel`,
+        successUrl: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/checkout/thanks?session_id={CHECKOUT_SESSION_ID}`,
+        cancelUrl: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/checkout/cancel?session_id={CHECKOUT_SESSION_ID}`,
     };
 }
 
@@ -87,7 +87,7 @@ const buildValidatedOrderRequest = (): OrderRequest => {
 const RecapForm = () => {
     const t = useTranslations("checkout.recap");
 
-    const {customerInfo, attendees, customFields, previousStep, nextStep, sessionId} =
+    const {customerInfo, attendees, customFields, previousStep, nextStep, sessionId, setCheckoutSessionId, setOrderId} =
         useCheckoutStore();
 
     const [expandedAttendees, setExpandedAttendees] = React.useState<number[]>([]);
@@ -97,7 +97,7 @@ const RecapForm = () => {
     } = authClient.useSession();
 
     const handleApplyPromoCode = async (code: string) => {
-        const result = await applyPromoCodeAction(code,sessionId);
+        const result = await applyPromoCodeAction(code, sessionId);
         if (!result.success) {
             throw new Error(result.error);
         }
@@ -448,13 +448,16 @@ const RecapForm = () => {
                 <Button onClick={async () => {
                     const loadingToast = toast.loading(t('order_loading'));
 
-                    nextStep();
+
                     const order = buildValidatedOrderRequest();
-                    const {data, error} = await createOrder(order,sessionId,session?.user?.accessToken as string);
+                    const {data, error} = await createOrder(order, sessionId, session?.user?.accessToken as string);
                     if (error) {
                         toast.error(t('order_error'), {id: loadingToast});
                     } else {
                         toast.success(t('order_success'), {id: loadingToast});
+                        setCheckoutSessionId(data?.sessionId as string);
+                        setOrderId(data?.orderId as string);
+                        nextStep();
                         globalThis.location.href = data?.checkoutUrl || '/';
                     }
                 }} className="flex-1">

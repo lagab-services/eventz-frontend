@@ -117,7 +117,7 @@ const TicketSelector = ({categories, className, onQuantityChange, selectedQuanti
                                         {!ticket.isSoldOut && (
                                             <CardContent className="pt-0">
                                                 <div className="flex items-center justify-between">
-                                                    <div className="text-xs text-gray-600 dark:text-gray-400">
+                                                    <div className="text-xs text-gray-600 dark:text-gray-400 invisible">
                                                         {t('maxPerOrder', {maxPerOrder: ticket.maxQuantity})}
                                                     </div>
 

@@ -40,7 +40,7 @@ const CartWrapper = ({cart,sessionId}: CartWrapperProps) => {
         setSessionId
     } = useCheckoutStore();
     let eventId: number;
-    const [eventLink,setEventLink]= useState<string>("#")
+    const [eventLink,setEventLink]= useState<string>("#");
     const {setCart} = useCartStore();
     const t = useTranslations('checkout');
 

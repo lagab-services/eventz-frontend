@@ -1,3 +1,5 @@
+import {Ticket} from "@/types/tickets";
+
 export interface OrderResponse {
     orderId: number;
     orderNumber: string;
@@ -11,8 +13,11 @@ export interface OrderResponse {
 
     // Event information
     eventTitle: string;
-    eventDate: string;        // ISO date string or Date
+    eventStartDate: string;
+    eventEndDate: string;// ISO date string or Date
     eventLocation: string;
+    eventAddress: string;
+    eventUrl: string;
 
     // Next steps
     expiresAt: string | null; // ISO date string or Date
@@ -24,6 +29,10 @@ export interface OrderItemResponse {
     quantity: number;
     unitPrice: number;
     totalPrice: number;
+}
+
+export interface OrderWithTickets extends OrderResponse {
+    tickets: Ticket[];
 }
 
 export enum OrderStatus {

@@ -26,6 +26,8 @@ interface CheckoutState {
     isLoading: boolean
     _hasHydrated: boolean
     sessionId: string
+    checkoutSessionId: string
+    orderId: string
 
     // Actions
     setCurrentStep: (step: CheckoutStep) => void
@@ -43,6 +45,8 @@ interface CheckoutState {
     fetchCustomFields: (eventId: number) => Promise<void>
     setHasHydrated: (_hasHydrated: boolean) => void
     setSessionId: (sessionId: string) => void
+    setCheckoutSessionId: (checkoutSessionId: string) => void
+    setOrderId: (orderId: string) => void
 }
 
 export const stepOrder: CheckoutStep[] = ['tickets', 'info', 'payment', 'confirmation']
@@ -67,6 +71,8 @@ export const useCheckoutStore = create<CheckoutState>()(
             isLoading: true,
             _hasHydrated: false,
             sessionId: '',
+            checkoutSessionId: '',
+            orderId: '',
 
             // Actions
             setSessionId: (sessionId) => set({ sessionId: sessionId }),
@@ -169,6 +175,8 @@ export const useCheckoutStore = create<CheckoutState>()(
                 }
             },
             setHasHydrated: (state: boolean) => set({ _hasHydrated: state }),
+            setCheckoutSessionId: (checkoutSessionId: string) => set({ checkoutSessionId: checkoutSessionId }),
+            setOrderId: (orderId: string) => set({ orderId: orderId }),
         }),
         {
             name: 'checkout-store',

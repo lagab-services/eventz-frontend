@@ -1,6 +1,6 @@
 import React from 'react';
 import {Event} from "@/types/events";
-import {useFormatter, useTranslations} from "next-intl";
+import {useTranslations} from "next-intl";
 import {Calendar, House, MapPin, Ticket} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import {formatAddress} from "@/lib/formater";
@@ -13,7 +13,6 @@ interface EventHeaderProps {
 }
 const EventHeader = ({event, onTicketsClick}: EventHeaderProps) => {
     const t = useTranslations('event');
-    const f = useFormatter();
     return (
         <div className="md:h-[500px] flex items-center justify-center overflow-hidden pt-8 md:pt-0">
             <div
@@ -29,7 +28,7 @@ const EventHeader = ({event, onTicketsClick}: EventHeaderProps) => {
                 <div
                     className="relative w-full overflow-hidden max-h-[calc(100svh-30px)] sm:max-h-[calc(100svh-135px)] aspect-video shadow-shadow md:shadow-3xl flex-1 rounded shadow-md mt-2">
                     <img alt={event.name}
-                         decoding="async" data-nimg="fill" className="object-cover object-top rounded-sm h-full"
+                         decoding="async" data-nimg="fill" className="object-cover object-top rounded-sm w-full h-full"
                          src={event.imageUrl}/>
                 </div>
                 <div className="md:max-w-[42%] md:flex-1">
