@@ -1,11 +1,16 @@
 import { betterAuth } from "better-auth";
+import {externalAuthPlugin} from "@/lib/auth/external-auth-plugin";
 
 export const auth = betterAuth({
+    emailAndPassword: {
+        enabled: true,
+        requireEmailVerification: false, // On gère ça via l'API externe
+    },
     session: {
         cookieCache: {
             enabled: true,
-            maxAge: 7 * 24 * 60 * 60, // 7 days cache duration
-            strategy: "jwe", // can be "jwt" or "compact"
+            maxAge: 24 * 60 * 60, // 24 hours cache duration
+            strategy: "jwt", // can be "jwt" or "compact"
             refreshCache: true, // Enable stateless refresh
         },
     },
@@ -24,7 +29,18 @@ export const auth = betterAuth({
             accessToken: {
                 type: "string",
                 input: false
-            }
+            },
+            organizations: {
+                type: "json",
+                input: false,
+            },
+            role: {
+                type: "string",
+                input: false,
+            },
         }
-    }
+    },
+    plugins: [
+        externalAuthPlugin(),
+    ],
 });
