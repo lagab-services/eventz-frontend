@@ -212,6 +212,24 @@
       "order_success": "Your order has been confirmed"
     },
     "redirect_in_progress": "Redirecting...",
-    "redirect_auto_message": "You will be redirected automatically in few seconds"
+    "redirect_auto_message": "You will be redirected automatically in few seconds",
+    "orderConfirmation": {
+      "thankYou": "Thank you for your order!",
+      "orderNumber": "Order number: {number}",
+      "summary": "Order summary",
+      "dateAndTime": "Date and time",
+      "location": "Location",
+      "tickets": "Tickets",
+      "downloadTicket": "Download ticket",
+      "discount": "Discount",
+      "total": "Total",
+      "backToEvent": "Back to event"
+    }
+  },
+  "notFound": {
+    "title": "Page not found",
+    "subtitle": "404 error",
+    "description": "Sorry, the page you are looking for does not exist.",
+    "backHome": "Back to home"
   }
 }

@@ -14,3 +14,15 @@ export const formatAddress = (address: Address): string => {
 
 export const formatEventUrl = (eventTitle: string, eventId: number | string): string =>
     `/${slugify(eventTitle)}_E${eventId}`;
+
+export const formatCurrency = (amount: number, locale: string, currency: string = "EUR") => {
+    const localeMap: Record<string, string> = {
+        fr: "fr-FR",
+        en: "en-US",
+        es: "es-ES",
+    };
+    return amount.toLocaleString(localeMap[locale] || locale, {
+        style: "currency",
+        currency,
+    });
+}

@@ -12,13 +12,15 @@ import {ArrowDownToLine, ArrowLeft, Calendar, Check, MapPin} from "lucide-react"
 import {Separator} from "@/components/ui/separator";
 import {Button} from "@/components/ui/button";
 import {Link} from "@/i18n/navigation";
-import {useLocale} from "next-intl";
+import {useLocale, useTranslations} from "next-intl";
 import {formatEventDates} from "@/lib/dateFormatter";
-import {Ticket} from "@/types/tickets";
+import {formatCurrency} from "@/lib/formater";
+import {generateTicketUrl} from "@/actions/ticket.actions";
 
 const OrderConfirmationCard = ({sessionId}: { sessionId: string }) => {
     const {clearCart} = useCartStore();
-    const {customerInfo, checkoutSessionId, orderId, _hasHydrated} = useCheckoutStore();
+    const {customerInfo, checkoutSessionId, orderId, _hasHydrated, reset} = useCheckoutStore();
+    const t = useTranslations('checkout.orderConfirmation');
 
     const [order, setOrder] = useState<OrderWithTickets | null>(null);
     const [loading, setLoading] = useState(true);
@@ -54,6 +56,7 @@ const OrderConfirmationCard = ({sessionId}: { sessionId: string }) => {
             }
 
             setOrder(data);
+            reset();
             setLoading(false);
         };
 
@@ -95,18 +98,18 @@ const OrderConfirmationCard = ({sessionId}: { sessionId: string }) => {
                     </div>
 
                     <h2 className="text-3xl font-bold text-center mb-4">
-                        Merci pour votre achat pour l  evenement
+                        {t('thankYou')}
                         <p className="text-4xl "> {order.eventTitle} 🎉</p>
                     </h2>
 
                     <p className="text-center text-muted-foreground mb-8">
-                        Commande n° <b>{order.orderNumber}</b>
+                        {t('orderNumber', {number: order.orderNumber})}
                     </p>
 
                     {/* Order Summary */}
                     <Card className="container md:w-2xl mx-auto bg-background shadow-none">
                         <CardHeader>
-                            <h3 className="text-2xl font-bold">Récapitulatif</h3>
+                            <h3 className="text-xl font-bold">{t('summary')}</h3>
                         </CardHeader>
 
                         <CardContent>
@@ -118,7 +121,7 @@ const OrderConfirmationCard = ({sessionId}: { sessionId: string }) => {
                                         <Calendar className="w-6 h-6 "/>
                                     </div>
                                     <div className="flex-1">
-                                        <p className="text-sm text-muted-foreground mb-1">Date et heure</p>
+                                        <p className="text-sm text-muted-foreground mb-1">{t('dateAndTime')}</p>
                                         <p className="font-semibold capitalize">
                                             {formatEventDates(order.eventStartDate, order.eventEndDate, locale)}
                                         </p>
@@ -131,7 +134,7 @@ const OrderConfirmationCard = ({sessionId}: { sessionId: string }) => {
                                         <MapPin className="w-6 h-6"/>
                                     </div>
                                     <div className="flex-1">
-                                        <p className="text-sm text-muted-foreground mb-1">Lieu</p>
+                                        <p className="text-sm text-muted-foreground mb-1">{t('location')}</p>
                                         <p className="font-semibold">{order.eventLocation}</p>
                                         {order.eventAddress && (
                                             <p className="text-muted-foreground">{order.eventAddress}</p>
@@ -142,15 +145,19 @@ const OrderConfirmationCard = ({sessionId}: { sessionId: string }) => {
 
                             <Separator className="my-8"/>
                             <div className="space-y-3 mb-4">
-                                <h3 className="text-lg font-bold">Tickets</h3>
+                                <h3 className="text-lg font-bold">{t('tickets')}</h3>
                                 {order.tickets.map((ticket) => (
-                                    <Card key={ticket.ticketId} className="shadow-none border-none py-2">
+                                    <Card key={ticket.ticketId} className="shadow-none border-none py-4">
                                         <CardContent className="flex gap-6 items-center">
-                                            <Button variant="ghost" className="cursor-pointer" onClick={() =>alert('Téléchargement du ticket...')}>
+                                            <Button variant="ghost" className="cursor-pointer"
+                                                    onClick={async () => {
+                                                        globalThis.location.href = await generateTicketUrl(ticket.ticketId);
+                                                    }}>
                                                 <ArrowDownToLine size={18}/>
                                             </Button>
                                             <div className="participant-info">
-                                                <div className="font-semibold">{ticket.buyerName} - <span className="text-xs font-medium">{ticket.ticketType}</span></div>
+                                                <div className="font-semibold">{ticket.buyerName} - <span
+                                                    className="text-xs font-medium">{ticket.ticketType}</span></div>
                                                 <div className="text-sm text-muted-foreground">{ticket.buyerEmail}</div>
 
                                             </div>
@@ -171,21 +178,23 @@ const OrderConfirmationCard = ({sessionId}: { sessionId: string }) => {
                                             {item.quantity} × {item.ticketTypeName}
                                         </span>
                                         <span>
-                                            {item.totalPrice.toLocaleString("fr-FR", {
-                                                style: "currency",
-                                                currency: "EUR",
-                                            })}
+                                            {formatCurrency(item.totalPrice, locale)}
                                         </span>
                                     </div>
                                 ))}
 
+                                {order.discountAmount && order.discountAmount > 0 && (
+                                    <div className="flex justify-between text-muted-foreground text-sm">
+                                        <span>{t('discount')}</span>
+                                        <span>
+                                            {formatCurrency(order.discountAmount, locale)}
+                                         </span>
+                                    </div>
+                                )}
                                 <div className="flex justify-between font-bold text-xl">
-                                    <span>Total</span>
+                                    <span>{t('total')}</span>
                                     <span>
-                                        {order.totalAmount.toLocaleString("fr-FR", {
-                                            style: "currency",
-                                            currency: "EUR",
-                                        })}
+                                        {formatCurrency(order.totalAmount, locale)}
                                     </span>
                                 </div>
                             </div>
@@ -198,7 +207,7 @@ const OrderConfirmationCard = ({sessionId}: { sessionId: string }) => {
                         <Link href={`/${order?.eventUrl}`}>
                             <Button variant="outline">
                                 <ArrowLeft/>
-                                Back to Event
+                                {t('backToEvent')}
                             </Button>
                         </Link>
                     </div>

@@ -33,8 +33,8 @@ interface CheckoutState {
     setCurrentStep: (step: CheckoutStep) => void
     completeStep: (step: CheckoutStep) => void
     updateTicketQuantity: (ticketId: number, quantity: number) => void
-    initializeAttendeesFromCart: (cartItems:  CartItemResponse[])  => void
-    updateAttendee: (index:number , attendee: AttendeeInfo) => void
+    initializeAttendeesFromCart: (cartItems: CartItemResponse[]) => void
+    updateAttendee: (index: number, attendee: AttendeeInfo) => void
     setCustomerInfo: (info: CustomerInfo) => void
     setPromoDiscount: (discount: number) => void
     setLoading: (loading: boolean) => void
@@ -59,7 +59,7 @@ export const useCheckoutStore = create<CheckoutState>()(
             completedSteps: [],
             ticketTypes: [],
             customFields: [],
-            attendees:[],
+            attendees: [],
             customerInfo: {
                 firstName: '',
                 lastName: '',
@@ -75,8 +75,8 @@ export const useCheckoutStore = create<CheckoutState>()(
             orderId: '',
 
             // Actions
-            setSessionId: (sessionId) => set({ sessionId: sessionId }),
-            setCurrentStep: (step) => set({ currentStep: step }),
+            setSessionId: (sessionId) => set({sessionId: sessionId}),
+            setCurrentStep: (step) => set({currentStep: step}),
 
             completeStep: (step) => set((state) => ({
                 completedSteps: [...state.completedSteps.filter(s => s !== step), step]
@@ -84,11 +84,11 @@ export const useCheckoutStore = create<CheckoutState>()(
 
             updateTicketQuantity: (ticketId, quantity) => set((state) => ({
                 ticketTypes: state.ticketTypes.map(ticket =>
-                    ticket.id === ticketId ? { ...ticket, quantity } : ticket
+                    ticket.id === ticketId ? {...ticket, quantity} : ticket
                 )
             })),
 
-            initializeAttendeesFromCart: (cartItems:  CartItemResponse[]) => {
+            initializeAttendeesFromCart: (cartItems: CartItemResponse[]) => {
                 const attendees: AttendeeInfo[] = [];
 
                 cartItems.forEach((item) => {
@@ -105,7 +105,7 @@ export const useCheckoutStore = create<CheckoutState>()(
                     }
                 });
 
-                set({ attendees });
+                set({attendees});
             },
 
             updateAttendee: (index, attendee: AttendeeInfo) => set((state) => ({
@@ -114,15 +114,15 @@ export const useCheckoutStore = create<CheckoutState>()(
                 )
             })),
 
-            setCustomerInfo: (info) => set({ customerInfo: info }),
+            setCustomerInfo: (info) => set({customerInfo: info}),
 
 
-            setPromoDiscount: (discount) => set({ promoDiscount: discount }),
+            setPromoDiscount: (discount) => set({promoDiscount: discount}),
 
-            setLoading: (loading) => set({ isLoading: loading }),
+            setLoading: (loading) => set({isLoading: loading}),
 
             nextStep: () => {
-                const { currentStep, completedSteps } = get()
+                const {currentStep, completedSteps} = get()
                 const currentIndex = stepOrder.indexOf(currentStep)
 
                 if (currentIndex < stepOrder.length - 1) {
@@ -135,12 +135,12 @@ export const useCheckoutStore = create<CheckoutState>()(
             },
 
             previousStep: () => {
-                const { currentStep } = get()
+                const {currentStep} = get()
                 const currentIndex = stepOrder.indexOf(currentStep)
 
                 if (currentIndex > 0) {
                     const prevStep = stepOrder[currentIndex - 1]
-                    set({ currentStep: prevStep })
+                    set({currentStep: prevStep})
                 }
             },
 
@@ -148,7 +148,7 @@ export const useCheckoutStore = create<CheckoutState>()(
                 currentStep: 'tickets',
                 completedSteps: [],
                 ticketTypes: [],
-                attendees:[],
+                attendees: [],
                 customerInfo: {
                     firstName: '',
                     lastName: '',
@@ -159,24 +159,26 @@ export const useCheckoutStore = create<CheckoutState>()(
                 promoDiscount: 0,
                 isLoading: false,
                 sessionId: '',
+                checkoutSessionId: '',
+                orderId: '',
             }),
-            setCustomFields: (fields) => set({ customFields: fields }),
+            setCustomFields: (fields) => set({customFields: fields}),
 
             fetchCustomFields: async (eventId: number) => {
                 try {
-                    set({ isLoading: true });
+                    set({isLoading: true});
                     const response = await getCustomFields(eventId);
                     if (!response.success) throw new Error('Failed to fetch custom fields');
-                    set({ customFields: response.data });
+                    set({customFields: response.data});
                 } catch (error) {
                     console.error('NotFound fetching custom fields:', error);
                 } finally {
-                    set({ isLoading: false });
+                    set({isLoading: false});
                 }
             },
-            setHasHydrated: (state: boolean) => set({ _hasHydrated: state }),
-            setCheckoutSessionId: (checkoutSessionId: string) => set({ checkoutSessionId: checkoutSessionId }),
-            setOrderId: (orderId: string) => set({ orderId: orderId }),
+            setHasHydrated: (state: boolean) => set({_hasHydrated: state}),
+            setCheckoutSessionId: (checkoutSessionId: string) => set({checkoutSessionId: checkoutSessionId}),
+            setOrderId: (orderId: string) => set({orderId: orderId}),
         }),
         {
             name: 'checkout-store',

@@ -17,8 +17,9 @@ import {userLoginSchema} from "@/app/[locale]/(auth)/_lib/validations";
 import {useTranslations} from "next-intl";
 import Link from "next/link";
 import {authClient} from "@/lib/auth/auth-client";
+import {auth} from "@/lib/auth/auth";
 
-interface UserAuthFormProps  {
+interface UserAuthFormProps {
     className?: string;
 }
 
@@ -41,27 +42,36 @@ const UserAuthForm = ({className}: UserAuthFormProps) => {
 
 
     async function onSubmit(data: FormData) {
+        setIsLoading(true);
 
-        /*setIsLoading(true)
-        const signInResult = await signIn('credentials', {
-            redirect: false,
-            email: data.email.toLowerCase(),
-            password: data.password,
-        });
+        try {
 
-        setIsLoading(false)
+            const res = await fetch("/api/auth/sign-in/external", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({
+                    email: data.email,
+                    password: data.password,
+                    rememberMe: false
+                }),
+            });
 
-        if (signInResult?.ok) {
-            router.push(redirect)
-            return toast.success(t('login_success'));
+            toast.success(t("login_success"));
+            router.push(redirect);
+            router.refresh();
+
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (e: any) {
+            toast.error("Erreur interne : " + e.message);
+        } finally {
+            setIsLoading(false);
         }
-
-        return toast.error(t('login_error'));*/
     }
 
-    const handleLogin =  async () => {
+    const handleLogin = async () => {
         await authClient.signIn.social({
             provider: "google",
+            callbackURL: redirect,
         });
     };
 

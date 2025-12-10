@@ -46,11 +46,6 @@ const buildOrderRequest = (): OrderRequest => {
         billingEmail: customerInfo.email,
         billingPhone: customerInfo.phone || undefined,
 
-        /*billingAddress: customerInfo.address || undefined,
-        billingCity: customerInfo.city || undefined,
-        billingZipCode: customerInfo.zipCode || undefined,
-        billingCountry: customerInfo.country || undefined,*/
-
         attendees: attendees.map(a => ({
             firstName: a.firstName,
             lastName: a.lastName,

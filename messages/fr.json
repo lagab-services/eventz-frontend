@@ -129,7 +129,7 @@
           "label": "Téléphone",
           "placeholder": "06 12 34 56 78"
         },
-        "terms":{
+        "terms": {
           "label": "J'accepte les conditions générales de vente *",
           "description": ""
         }
@@ -216,6 +216,24 @@
       "order_success": "Votre commande a été validée avec succès"
     },
     "redirect_in_progress": "Redirection en cours...",
-    "redirect_auto_message": "Vous allez être redirigé automatiquement dans quelques instants"
+    "redirect_auto_message": "Vous allez être redirigé automatiquement dans quelques instants",
+    "orderConfirmation": {
+      "thankYou": "Merci pour votre commande !",
+      "orderNumber": "Numéro de commande : {number}",
+      "summary": "Résumé de la commande",
+      "dateAndTime": "Date et heure",
+      "location": "Lieu",
+      "tickets": "Billets",
+      "downloadTicket": "Télécharger le billet",
+      "discount": "Réduction",
+      "total": "Total",
+      "backToEvent": "Retour à l'événement"
+    }
+  },
+  "notFound": {
+    "title": "Page non trouvée",
+    "subtitle": "Erreur 404",
+    "description": "Désolé, la page que vous recherchez n'existe pas.",
+    "backHome": "Retour à l'accueil"
   }
 }

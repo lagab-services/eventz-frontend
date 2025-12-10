@@ -5,6 +5,7 @@ export interface OrderResponse {
     orderNumber: string;
     status: OrderStatus;
     totalAmount: number;
+    discountAmount: number;
     feesAmount: number;
     createdAt: string;        // ISO date string or Date
 
