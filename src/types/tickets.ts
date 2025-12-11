@@ -1,5 +1,8 @@
+import {listSearchParams} from "@/lib/listSearchParams";
+
 export interface Ticket {
     eventName: string;
+    eventUrl: string;
     surtitle: string | null;
     subtitle: string | null;
     startDate: string;
@@ -23,3 +26,5 @@ export interface Ticket {
     ticketId: string;
     price: number;
 }
+
+export type GetTicketsSchema = Awaited<ReturnType<typeof listSearchParams.parse>>;

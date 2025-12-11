@@ -1,10 +1,10 @@
-import { betterAuth } from "better-auth";
+import {betterAuth} from "better-auth";
 import {externalAuthPlugin} from "@/lib/auth/external-auth-plugin";
 
 export const auth = betterAuth({
     emailAndPassword: {
         enabled: true,
-        requireEmailVerification: false, // On gère ça via l'API externe
+        requireEmailVerification: false,
     },
     session: {
         cookieCache: {
@@ -24,7 +24,7 @@ export const auth = betterAuth({
             clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
         },
     },
-    user:{
+    user: {
         additionalFields: {
             accessToken: {
                 type: "string",

@@ -8,6 +8,7 @@ interface RequestOptions {
     headers?: Record<string, string>;
     params?: Record<string, unknown>;
     timeout?: number;
+
     [key: string]: unknown;
 }
 
@@ -26,6 +27,7 @@ interface ApiError extends Error {
     data?: unknown;
     code?: string;
 }
+
 export class APIError extends Error {
     constructor(
         message: string,
@@ -83,7 +85,7 @@ class RestApi {
      * @param {Object} headers - Headers object
      */
     setHeaders(headers: Record<string, string>): this {
-        this.defaultHeaders = { ...this.defaultHeaders, ...headers };
+        this.defaultHeaders = {...this.defaultHeaders, ...headers};
         return this;
     }
 
@@ -122,7 +124,7 @@ class RestApi {
      * @param {Object} config - Request configuration
      */
     private async processRequestInterceptors(config: RequestConfig): Promise<RequestConfig> {
-        let processedConfig = { ...config };
+        let processedConfig = {...config};
 
         for (const interceptor of this.interceptors.request) {
             processedConfig = await interceptor(processedConfig) || processedConfig;
@@ -175,7 +177,7 @@ class RestApi {
         // Prepare request config
         let config: RequestConfig = {
             method: method.toUpperCase(),
-            headers: { ...this.defaultHeaders, ...headers },
+            headers: {...this.defaultHeaders, ...headers},
             ...otherOptions
         };
 
@@ -214,10 +216,11 @@ class RestApi {
                 error.statusText = response.statusText;
                 error.response = response;
 
+                const rawText = await response.text();
                 try {
-                    error.data = await response.json();
+                    error.data = JSON.parse(rawText);
                 } catch {
-                    error.data = await response.text();
+                    error.data = rawText;
                 }
 
                 throw error;
@@ -273,21 +276,21 @@ class RestApi {
      * POST request
      */
     post<T = unknown>(endpoint: string, data?: unknown, options: RequestOptions = {}): Promise<ApiResponse<T>> {
-        return this.request<T>('POST', endpoint, { ...options, data });
+        return this.request<T>('POST', endpoint, {...options, data});
     }
 
     /**
      * PUT request
      */
     put<T = unknown>(endpoint: string, data?: unknown, options: RequestOptions = {}): Promise<ApiResponse<T>> {
-        return this.request<T>('PUT', endpoint, { ...options, data });
+        return this.request<T>('PUT', endpoint, {...options, data});
     }
 
     /**
      * PATCH request
      */
     patch<T = unknown>(endpoint: string, data?: unknown, options: RequestOptions = {}): Promise<ApiResponse<T>> {
-        return this.request<T>('PATCH', endpoint, { ...options, data });
+        return this.request<T>('PATCH', endpoint, {...options, data});
     }
 
     /**
@@ -324,8 +327,8 @@ const apiClient = createAPI(process.env.BACKEND_URL || '/api', {});
 const externalAPI = createAPI('', {});
 
 // ES6 export for Next.js
-export { RestApi, createAPI, apiClient, externalAPI };
-export type { RequestConfig, RequestOptions, ApiResponse, ApiError, RequestInterceptor, ResponseInterceptor };
+export {RestApi, createAPI, apiClient, externalAPI};
+export type {RequestConfig, RequestOptions, ApiResponse, ApiError, RequestInterceptor, ResponseInterceptor};
 export default apiClient;
 
 

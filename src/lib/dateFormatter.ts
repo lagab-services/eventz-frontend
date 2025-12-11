@@ -1,6 +1,6 @@
-import { format, isSameDay, Locale } from "date-fns";
+import {format, isSameDay, Locale} from "date-fns";
 
-import { fr, enUS, es } from "date-fns/locale";
+import {fr, enUS, es} from "date-fns/locale";
 
 type SupportedLocale = "fr" | "en" | "es";
 
@@ -20,15 +20,15 @@ export const formatEventDates = (
     const loc = localeMap[locale];
 
     const formatFull = (d: Date): string =>
-        `${format(d, "d MMMM yyyy", { locale: loc })} · ${format(d, "HH:mm", { locale: loc })}`;
+        `${format(d, "d MMMM yyyy", {locale: loc})} · ${format(d, "HH:mm", {locale: loc})}`;
 
     // Case 1: Event happening on a single day
     if (isSameDay(start, end)) {
-        return `${format(start, "d MMMM yyyy", { locale: loc })} · ${format(
+        return `${format(start, "d MMMM yyyy", {locale: loc})} · ${format(
             start,
             "HH:mm",
-            { locale: loc }
-        )} - ${format(end, "HH:mm", { locale: loc })}`;
+            {locale: loc}
+        )} - ${format(end, "HH:mm", {locale: loc})}`;
     }
 
     // Case 2: Multi-day event → always show full date + time for both
@@ -97,12 +97,13 @@ export const formatEventDate = (
     const date = new Date(dateStr);
     const loc = localeMap[locale];
 
-    return `${format(date, "d MMMM yyyy", { locale: loc })} · ${format(
+    return `${format(date, "d MMMM yyyy", {locale: loc})} · ${format(
         date,
         "HH:mm",
-        { locale: loc }
+        {locale: loc}
     )}`;
 };
+
 /*
 ---------------------------------------------------------
  Example usage (Client Component - React)
@@ -150,3 +151,14 @@ export default async function Page2() {
 // "15 junio 2025 · 09:00"
 
 */
+
+
+export function formatDateCustom(
+    dateStr: string,
+    formatStr: string,
+    locale: string = "fr"
+): string {
+    const date = new Date(dateStr);
+    const loc = localeMap[locale] || fr;
+    return format(date, formatStr, {locale: loc});
+}

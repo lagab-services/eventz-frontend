@@ -2,6 +2,7 @@ import {apiClient, RestApi} from "@/lib/httpClient";
 import {CheckoutResponse, OrderRequest, TrackOrderRequest} from "@/types/checkout";
 import {Page} from "@/types/page";
 import {OrderResponse, OrderWithTickets} from "@/types/order";
+import {Ticket} from "@/types/tickets";
 
 export class OrderService {
     private readonly api: RestApi;
@@ -18,11 +19,11 @@ export class OrderService {
     }
 
     static fromAccessAndSession(accessToken?: string, sessionToken?: string) {
-        return new OrderService(accessToken, sessionToken ? { 'X-Session-Token': sessionToken } : undefined);
+        return new OrderService(accessToken, sessionToken ? {'X-Session-Token': sessionToken} : undefined);
     }
 
     static fromToken(token: string) {
-        return new OrderService(undefined, { 'X-Session-Token': token });
+        return new OrderService(undefined, {'X-Session-Token': token});
     }
 
     // ➤ POST /api/orders/checkout
@@ -34,6 +35,17 @@ export class OrderService {
     // ➤ GET /api/orders/{orderId}
     async getOrder(orderId: number): Promise<OrderResponse> {
         const res = await this.api.get<OrderResponse>(`/api/orders/${orderId}`);
+        return res.data;
+    }
+
+    // ➤ GET /api/orders/user/tickets?page=0&size=20
+    async getUserTickets(
+        page: number = 0,
+        size: number = 20
+    ): Promise<Page<Ticket>> {
+        const res = await this.api.get<Page<Ticket>>(`/api/orders/user/tickets`, {
+            params: {page, size}
+        });
         return res.data;
     }
 
