@@ -1,5 +1,8 @@
 "use client";
-import {resetPasswordFormSchema, ResetPasswordFormValues} from "@/app/[locale]/(auth)/_lib/validations";
+import {
+    getResetPasswordFormSchema,
+    ResetPasswordFormValues
+} from "@/app/[locale]/(auth)/_lib/validations";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
@@ -17,7 +20,7 @@ const ResetPasswordForm = ({className}: ResetPasswordFormProps) => {
 
 
     const form = useForm<ResetPasswordFormValues>({
-        resolver: zodResolver(resetPasswordFormSchema),
+        resolver: zodResolver(getResetPasswordFormSchema(t)),
         defaultValues: {
             password: '',
             confirmPassword: '',

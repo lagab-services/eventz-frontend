@@ -1,44 +1,48 @@
 import {z} from "zod";
+import {TFunction} from "@/types";
 
-export const emailSchema = z.email();
-
-export const passwordSchema = z
-    .string()
-    .min(6, { message: 'Password must be at least 6 characters long' })
-    .regex(/[a-zA-Z0-9]/, { message: 'Password must be alphanumeric' })
-
-export const nameSchema = z
-    .string()
-    .min(2, { message: 'Name must be at least 2 characters long' });
-
-export const userLoginSchema = z.object({
-    email: emailSchema,
-    password: passwordSchema
-});
-
-
-export const resetPasswordFormSchema = z
-    .object({
-        password: passwordSchema,
-        confirmPassword: z.string(),
-    })
-    .refine((data) => data.password === data.confirmPassword, {
-        path: ['confirmPassword'],
-        message: 'Passwords do not match',
+export const getUserLoginSchema = (t: TFunction) =>
+    z.object({
+        email: z.email({message: t('login_email_error')}),
+        password: z.string()
+            .min(6, {message: t('login_password_min_error')})
+            .regex(/[a-zA-Z0-9]/, {message: t('login_password_regex_error')}),
     });
 
-export type ResetPasswordFormValues = z.infer<typeof resetPasswordFormSchema>;
+export type UserLoginFormValues = z.infer<ReturnType<typeof getUserLoginSchema>>;
 
-export const registerFormSchema = z
-    .object({
-        name: nameSchema,
-        email: emailSchema,
-        password: passwordSchema,
+export const getResetPasswordFormSchema = (t: TFunction) =>
+    z.object({
+        password: z.string()
+            .min(6, {message: t('reset_password_min_error')})
+            .regex(/[a-zA-Z0-9]/, {message: t('reset_password_regex_error')}),
         confirmPassword: z.string(),
-    })
-    .refine((data) => data.password === data.confirmPassword, {
+    }).refine((data) => data.password === data.confirmPassword, {
         path: ['confirmPassword'],
-        message: 'Passwords do not match',
+        message: t('reset_passwords_match_error'),
     });
 
-export type RegisterFormValues = z.infer<typeof registerFormSchema>;
+export type ResetPasswordFormValues = z.infer<ReturnType<typeof getResetPasswordFormSchema>>;
+
+export const getRegisterFormSchema = (t: TFunction) =>
+    z.object({
+        firstName: z.string().min(2, {message: t('register_firstname_error')}),
+        lastName: z.string().min(2, {message: t('register_lastname_error')}),
+        email: z.email({message: t('register_email_error')}),
+        password: z.string()
+            .min(6, {message: t('register_password_min_error')})
+            .regex(/[a-zA-Z0-9]/, {message: t('register_password_regex_error')}),
+        confirmPassword: z.string(),
+    }).refine((data) => data.password === data.confirmPassword, {
+        path: ['confirmPassword'],
+        message: t('register_passwords_match_error'),
+    });
+
+export type RegisterFormValues = z.infer<ReturnType<typeof getRegisterFormSchema>>;
+
+export const getForgotPasswordFormSchema = (t: TFunction) =>
+    z.object({
+        email: z.email({message: t('forgot_password_email_error')}),
+    });
+
+export type ForgotPasswordFormValues = z.infer<ReturnType<typeof getForgotPasswordFormSchema>>;

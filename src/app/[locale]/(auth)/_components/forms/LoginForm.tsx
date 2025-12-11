@@ -9,26 +9,23 @@ import {Input} from "@/components/ui/input"
 import {LoaderCircle} from "lucide-react"
 
 import {PasswordInput} from '@/components/ui/password-input';
-import {z} from 'zod';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from '@/components/ui/form';
 import {toast} from "sonner";
-import {userLoginSchema} from "@/app/[locale]/(auth)/_lib/validations";
+import {getUserLoginSchema, UserLoginFormValues} from "@/app/[locale]/(auth)/_lib/validations";
 import {useTranslations} from "next-intl";
 import Link from "next/link";
 import {authClient} from "@/lib/auth/auth-client";
-import {auth} from "@/lib/auth/auth";
 
 interface UserAuthFormProps {
     className?: string;
 }
 
-type FormData = z.infer<typeof userLoginSchema>
 
 const UserAuthForm = ({className}: UserAuthFormProps) => {
     const t = useTranslations('auth');
-    const form = useForm<FormData>({
-        resolver: zodResolver(userLoginSchema),
+    const form = useForm<UserLoginFormValues>({
+        resolver: zodResolver(getUserLoginSchema(t)),
         defaultValues: {
             email: "",
             password: "",
@@ -41,7 +38,7 @@ const UserAuthForm = ({className}: UserAuthFormProps) => {
     const [isGoogleLoading, setIsGoogleLoading] = useState<boolean>(false);
 
 
-    async function onSubmit(data: FormData) {
+    async function onSubmit(data: UserLoginFormValues) {
         setIsLoading(true);
 
         try {
@@ -62,7 +59,7 @@ const UserAuthForm = ({className}: UserAuthFormProps) => {
 
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (e: any) {
-            toast.error("Erreur interne : " + e.message);
+            toast.error("Internal Error : " + e.message);
         } finally {
             setIsLoading(false);
         }

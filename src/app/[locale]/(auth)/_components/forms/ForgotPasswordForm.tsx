@@ -11,13 +11,12 @@ import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from '@/
 import {useTranslations} from "next-intl";
 import {forgotPasswordAction} from "@/app/[locale]/(auth)/_lib/auth-actions";
 
+const getForgotPasswordFormSchema = (t: (key: string) => string) =>
+    z.object({
+        email: z.email({message: t('forgot_password_email_error')}),
+    });
 
-
-const formSchema = z.object({
-    email: z.email({message: 'Enter a valid email address'})
-});
-
-type ForgotPasswordFormValue = z.infer<typeof formSchema>;
+type ForgotPasswordFormValue = z.infer<ReturnType<typeof getForgotPasswordFormSchema>>;
 
 interface ForgotPasswordFormProps extends React.HTMLAttributes<HTMLDivElement> {
     onSuccess?: () => void;
@@ -27,7 +26,7 @@ const ForgotPasswordForm = ({className, onSuccess, ...props}: ForgotPasswordForm
     const t = useTranslations('auth');
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const form = useForm<ForgotPasswordFormValue>({
-        resolver: zodResolver(formSchema),
+        resolver: zodResolver(getForgotPasswordFormSchema(t)),
         defaultValues: {
             email: "",
         },
@@ -42,7 +41,7 @@ const ForgotPasswordForm = ({className, onSuccess, ...props}: ForgotPasswordForm
             error: t('forgot_password_error')
         };
 
-        const success = await forgotPasswordAction(data,messages);
+        const success = await forgotPasswordAction(data, messages);
 
         setIsLoading(false);
 

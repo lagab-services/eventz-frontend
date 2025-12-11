@@ -7,21 +7,20 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {Input} from "@/components/ui/input";
 import {PasswordInput} from "@/components/ui/password-input";
 import {Button} from "@/components/ui/button";
-import {registerFormSchema, RegisterFormValues} from "@/app/[locale]/(auth)/_lib/validations";
+import {getRegisterFormSchema, RegisterFormValues} from "@/app/[locale]/(auth)/_lib/validations";
 import {registerUser} from "@/app/[locale]/(auth)/_lib/auth-actions";
 
-interface RegisterFormProps{
+interface RegisterFormProps {
     className?: string;
 }
-const RegisterForm = ({className} :RegisterFormProps) => {
+
+const RegisterForm = ({className}: RegisterFormProps) => {
     const t = useTranslations('auth');
-
-
-
     const form = useForm<RegisterFormValues>({
-        resolver: zodResolver(registerFormSchema),
+        resolver: zodResolver(getRegisterFormSchema(t)),
         defaultValues: {
-            name: '',
+            firstName: '',
+            lastName: '',
             email: '',
             password: '',
             confirmPassword: '',
@@ -37,7 +36,7 @@ const RegisterForm = ({className} :RegisterFormProps) => {
             error: t('register_password_error')
         };
 
-        await registerUser(data,messages);
+        await registerUser(data, messages);
     };
 
 
@@ -46,26 +45,41 @@ const RegisterForm = ({className} :RegisterFormProps) => {
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                     <div className="grid gap-4">
-                        {/* Name Field */}
-                        <FormField
-                            control={form.control}
-                            name="name"
-                            render={({ field }) => (
-                                <FormItem className="grid gap-2">
-                                    <FormLabel htmlFor="name">{t('register_fullname')}</FormLabel>
-                                    <FormControl>
-                                        <Input id="name" placeholder="John Doe" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
+                        <div className="grid grid-cols-2 gap-3">
+                            {/* First Name Field */}
+                            <FormField
+                                control={form.control}
+                                name="firstName"
+                                render={({field}) => (
+                                    <FormItem className="grid gap-2">
+                                        <FormLabel htmlFor="firstName">{t('register_firstname')}</FormLabel>
+                                        <FormControl>
+                                            <Input id="firstName" placeholder="John" {...field} />
+                                        </FormControl>
+                                        <FormMessage/>
+                                    </FormItem>
+                                )}
+                            />
+                            {/* Last Name Field */}
+                            <FormField
+                                control={form.control}
+                                name="lastName"
+                                render={({field}) => (
+                                    <FormItem className="grid gap-2">
+                                        <FormLabel htmlFor="lastName">{t('register_lastname')}</FormLabel>
+                                        <FormControl>
+                                            <Input id="lastName" placeholder="Doe" {...field} />
+                                        </FormControl>
+                                        <FormMessage/>
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
                         {/* Email Field */}
                         <FormField
                             control={form.control}
                             name="email"
-                            render={({ field }) => (
+                            render={({field}) => (
                                 <FormItem className="grid gap-2">
                                     <FormLabel htmlFor="email">{t('email')}</FormLabel>
                                     <FormControl>
@@ -77,7 +91,7 @@ const RegisterForm = ({className} :RegisterFormProps) => {
                                             {...field}
                                         />
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage/>
                                 </FormItem>
                             )}
                         />
@@ -86,7 +100,7 @@ const RegisterForm = ({className} :RegisterFormProps) => {
                         <FormField
                             control={form.control}
                             name="password"
-                            render={({ field }) => (
+                            render={({field}) => (
                                 <FormItem className="grid gap-2">
                                     <FormLabel htmlFor="password">{t('password')}</FormLabel>
                                     <FormControl>
@@ -97,7 +111,7 @@ const RegisterForm = ({className} :RegisterFormProps) => {
                                             {...field}
                                         />
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage/>
                                 </FormItem>
                             )}
                         />
@@ -106,7 +120,7 @@ const RegisterForm = ({className} :RegisterFormProps) => {
                         <FormField
                             control={form.control}
                             name="confirmPassword"
-                            render={({ field }) => (
+                            render={({field}) => (
                                 <FormItem className="grid gap-2">
                                     <FormLabel htmlFor="confirmPassword">
                                         {t('confirm_password')}
@@ -119,7 +133,7 @@ const RegisterForm = ({className} :RegisterFormProps) => {
                                             {...field}
                                         />
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage/>
                                 </FormItem>
                             )}
                         />
