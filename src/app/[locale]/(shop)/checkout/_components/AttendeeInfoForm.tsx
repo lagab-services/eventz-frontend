@@ -1,99 +1,96 @@
 "use client";
 
 import {useEffect, useState} from 'react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import {  Mail, ArrowRight, ArrowLeft, Check } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { useCheckoutStore } from "@/store/checkout";
-import { Input } from "@/components/ui/input";
-import { useForm } from "react-hook-form";
-import { Badge } from "@/components/ui/badge";
-import { z } from 'zod';
-import { cn } from '@/lib/utils';
+import {zodResolver} from '@hookform/resolvers/zod';
+import {Mail, ArrowRight, ArrowLeft, Check} from 'lucide-react';
+import {Button} from '@/components/ui/button';
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
+import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from '@/components/ui/form';
+import {useCheckoutStore} from "@/store/checkout";
+import {Input} from "@/components/ui/input";
+import {useForm} from "react-hook-form";
+import {Badge} from "@/components/ui/badge";
+import {z} from 'zod';
+import {cn} from '@/lib/utils';
 import {
     Accordion,
     AccordionContent,
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion";
-import { useTranslations } from 'next-intl';
+import {useTranslations} from 'next-intl';
 import {CustomFieldRenderer} from "./CustomFieldRenderer";
 import {AttendeeInfo} from "@/types/checkout";
 import {CustomField} from "@/types/customFields";
+import {Checkbox} from '@/components/ui/checkbox';
+import {authClient} from '@/lib/auth/auth-client';
 
 
 // Validation schema for an attendee
-const createAttendeeSchema = (customFields: CustomField[]) => {
+const createAttendeeSchema = (customFields: CustomField[], t: ReturnType<typeof useTranslations>) => {
     const customFieldsSchema: Record<string, z.ZodTypeAny> = {};
 
     customFields.forEach(field => {
         let fieldSchema: z.ZodTypeAny;
-
-        switch (field.fieldType) {
-            case 'TEXT':
-            case 'TEXTAREA':
-                if (field.isRequired) {
-                    fieldSchema = z.string().min(1, `${field.fieldLabel} est requis`);
-                } else {
-                    fieldSchema = z.string().optional();
-                }
-                break;
-            case 'NUMBER':
-                if (field.isRequired) {
-                    fieldSchema = z.number().min(0, `${field.fieldLabel} est requis`);
-                } else {
-                    fieldSchema = z.number().optional();
-                }
-                break;
-            case 'SELECT':
-                if (field.isRequired) {
-                    fieldSchema = z.string().min(1, `${field.fieldLabel} est requis`);
-                } else {
-                    fieldSchema = z.string().optional();
-                }
-                break;
-            case 'CHECKBOX':
-                fieldSchema = z.boolean();
-                if (field.isRequired) {
-                    fieldSchema = fieldSchema.refine(val => val === true, {
-                        message: `${field.fieldLabel} est requis`,
-                    });
-                } else {
-                    fieldSchema = fieldSchema.optional();
-                }
-                break;
-            default:
-                // Cas de sécurité si un nouveau type apparaît
-                fieldSchema = z.any().optional();
+        // TEXT, TEXTAREA, SELECT: même logique
+        if (["TEXT", "TEXTAREA", "SELECT"].includes(field.fieldType)) {
+            if (field.isRequired) {
+                fieldSchema = z.string().min(1, t('validation.required', {field: field.fieldLabel}));
+            } else {
+                fieldSchema = z.string().optional();
+            }
+        } else if (field.fieldType === 'NUMBER') {
+            if (field.isRequired) {
+                fieldSchema = z.number().min(0, t('validation.required', {field: field.fieldLabel}));
+            } else {
+                fieldSchema = z.number().optional();
+            }
+        } else if (field.fieldType === 'CHECKBOX') {
+            fieldSchema = z.boolean();
+            if (field.isRequired) {
+                fieldSchema = fieldSchema.refine(val => val === true, {
+                    message: t('validation.required', {field: field.fieldLabel}),
+                });
+            } else {
+                fieldSchema = fieldSchema.optional();
+            }
+        } else {
+            // Cas de sécurité si un nouveau type apparaît
+            fieldSchema = z.any().optional();
         }
 
         customFieldsSchema[field.fieldName] = fieldSchema;
     });
 
     return z.object({
-        firstName: z.string().min(2, 'First name must contain at least 2 characters'),
-        lastName: z.string().min(2, 'Last name must contain at least 2 characters'),
-        email: z.email('Invalid email'),
+        firstName: z.string().min(2, t('validation.firstName')),
+        lastName: z.string().min(2, t('validation.lastName')),
+        email: z.email(t('validation.email')),
         ticketTypeId: z.number(),
         ticketTypeName: z.string(),
         customFields: z.object(customFieldsSchema).optional(),
     });
 };
 
-interface AttendeeInfoFormProps {
-    eventId: number;
-}
 
-const AttendeeInfoForm = ({ eventId }: AttendeeInfoFormProps) => {
+const AttendeeInfoForm = () => {
     const t = useTranslations('checkout');
 
-    const { attendees, customerInfo, updateAttendee, setCustomerInfo, nextStep, previousStep, customFields } = useCheckoutStore();
+    const {
+        attendees,
+        customerInfo,
+        updateAttendee,
+        setCustomerInfo,
+        nextStep,
+        previousStep,
+        customFields
+    } = useCheckoutStore();
 
     const [currentAttendeeIndex, setCurrentAttendeeIndex] = useState(0);
     const [completedAttendees, setCompletedAttendees] = useState<number[]>([]);
     const [expandedItems, setExpandedItems] = useState<string[]>(['attendee-0']);
+    const {data: session} = authClient.useSession();
+    const [useMyInfo, setUseMyInfo] = useState(false);
 
     const currentAttendee = attendees[currentAttendeeIndex];
 
@@ -109,7 +106,7 @@ const AttendeeInfoForm = ({ eventId }: AttendeeInfoFormProps) => {
         ? getCustomFieldsForTicket(currentAttendee.ticketTypeId)
         : [];
 
-    const attendeeSchema = createAttendeeSchema(relevantCustomFields);
+    const attendeeSchema = createAttendeeSchema(relevantCustomFields, t);
     type AttendeeInfoSchema = z.infer<typeof attendeeSchema>;
 
     const form = useForm<AttendeeInfoSchema>({
@@ -139,13 +136,27 @@ const AttendeeInfoForm = ({ eventId }: AttendeeInfoFormProps) => {
         }
     }, [currentAttendeeIndex, currentAttendee, form, customerInfo]);
 
-    const onSubmit = (data: AttendeeInfoSchema) => {
 
+    useEffect(() => {
+        if (useMyInfo && session?.user) {
+            let firstName = '';
+            let lastName = '';
+            if (session.user.name) {
+                const parts = session.user.name.split(' ');
+                firstName = parts[0] || '';
+                lastName = parts.slice(1).join(' ') || '';
+            }
+            form.setValue('firstName', firstName);
+            form.setValue('lastName', lastName);
+            form.setValue('email', session.user.email || '');
+        }
+    }, [useMyInfo, session, form]);
+
+    const onSubmit = (data: AttendeeInfoSchema) => {
         const customFieldsData: Record<string, unknown> = {};
         if (data.customFields) {
             Object.entries(data.customFields).forEach(([key, value]) => {
-                // Exemple: si c'est un nombre au format string, on le convertit
-                if (typeof value === 'string' && !isNaN(Number(value))) {
+                if (typeof value === 'string' && !Number.isNaN(Number(value))) {
                     customFieldsData[key] = Number(value);
                 } else {
                     customFieldsData[key] = value;
@@ -205,7 +216,13 @@ const AttendeeInfoForm = ({ eventId }: AttendeeInfoFormProps) => {
 
     const isAttendeeComplete = (index: number) => {
         const attendee = attendees[index];
-        return attendee.firstName && attendee.lastName && attendee.email;
+        if (!attendee) return false;
+
+        const relevantCustomFields = getCustomFieldsForTicket(attendee.ticketTypeId);
+        const attendeeSchema = createAttendeeSchema(relevantCustomFields, t);
+
+        const result = attendeeSchema.safeParse(attendee);
+        return result.success;
     };
 
     const allAttendeesComplete = attendees.every((_, index) => isAttendeeComplete(index));
@@ -224,7 +241,7 @@ const AttendeeInfoForm = ({ eventId }: AttendeeInfoFormProps) => {
                 attendees: [],
             };
         }
-        acc[key].attendees.push({ ...attendee, originalIndex: index });
+        acc[key].attendees.push({...attendee, originalIndex: index});
         return acc;
     }, {} as Record<number, { ticketTypeName: string; attendees: (AttendeeInfo & { originalIndex: number })[] }>);
 
@@ -242,6 +259,16 @@ const AttendeeInfoForm = ({ eventId }: AttendeeInfoFormProps) => {
                 </CardHeader>
 
                 <CardContent className=" px-0 md:px-6">
+                    {!session?.user && (
+                        <div className="mb-4 flex justify-center">
+                            <a
+                                href={`/sign-in?redirect=${encodeURIComponent(typeof window !== 'undefined' ? window.location.pathname + window.location.search : '')}`}
+                                className="text-primary underline text-sm"
+                            >
+                                {t('actions.signInToPrefill')}
+                            </a>
+                        </div>
+                    )}
                     <div className="mb-6">
                         <Accordion
                             type="multiple"
@@ -254,7 +281,7 @@ const AttendeeInfoForm = ({ eventId }: AttendeeInfoFormProps) => {
                                     <h3 className="font-semibold text-sm text-gray-700 dark:text-gray-400 px-4">
                                         {group.ticketTypeName}
                                     </h3>
-                                    {group.attendees.map((attendee, groupIndex) => {
+                                    {group.attendees.map((attendee) => {
                                         const index = attendee.originalIndex;
                                         const isComplete = isAttendeeComplete(index);
                                         const isCurrent = index === currentAttendeeIndex;
@@ -273,17 +300,18 @@ const AttendeeInfoForm = ({ eventId }: AttendeeInfoFormProps) => {
                                                     className="px-4 hover:no-underline"
                                                     onClick={() => goToAttendee(index)}
                                                 >
-                                                    <div className="flex md:items-center justify-between w-full md:pr-4 flex-col md:flex-row gap-2 md:gap-0">
+                                                    <div
+                                                        className="flex md:items-center justify-between w-full md:pr-4 flex-col md:flex-row gap-2 md:gap-0">
                                                         <div className="flex items-center gap-3">
                                                             <div className={cn(
                                                                 "w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium",
                                                                 isComplete ? "bg-green-500 text-white" : "bg-gray-200 text-gray-600"
                                                             )}>
-                                                                {isComplete ? <Check className="w-4 h-4" /> : index + 1}
+                                                                {isComplete ? <Check className="w-4 h-4"/> : index + 1}
                                                             </div>
                                                             <div className="text-left">
                                                                 <p className="font-medium dark:text-gray-100">
-                                                                    {t('attendee.label', { index: index + 1 })}
+                                                                    {t('attendee.label', {index: index + 1})}
                                                                 </p>
                                                                 {attendee.firstName && attendee.lastName && (
                                                                     <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -292,7 +320,8 @@ const AttendeeInfoForm = ({ eventId }: AttendeeInfoFormProps) => {
                                                                 )}
                                                             </div>
                                                         </div>
-                                                        <Badge variant={isComplete ? "default" : "outline"} className="dark:bg-gray-700 dark:text-white">
+                                                        <Badge variant={isComplete ? "default" : "outline"}
+                                                               className="dark:bg-gray-700 dark:text-white">
                                                             {group.ticketTypeName}
                                                         </Badge>
                                                     </div>
@@ -300,18 +329,38 @@ const AttendeeInfoForm = ({ eventId }: AttendeeInfoFormProps) => {
                                                 <AccordionContent className="px-4 pb-4">
                                                     {isCurrent && (
                                                         <Form {...form}>
-                                                            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mt-4">
+                                                            <form onSubmit={form.handleSubmit(onSubmit)}
+                                                                  className="space-y-4 mt-4">
+                                                                {index === 0 && session?.user && (
+                                                                    <div className="flex items-center gap-2 mb-2">
+                                                                        <Checkbox
+                                                                            id="use-my-info"
+                                                                            checked={useMyInfo}
+                                                                            onCheckedChange={checked => setUseMyInfo(!!checked)}
+                                                                        />
+                                                                        <label htmlFor="use-my-info"
+                                                                               className="text-sm cursor-pointer select-none">
+                                                                            {t('actions.useMyInfo', {
+                                                                                name: session.user.name,
+                                                                                email: session.user.email
+                                                                            })}
+                                                                        </label>
+                                                                    </div>
+                                                                )}
+
                                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                                     <FormField
                                                                         control={form.control}
                                                                         name="firstName"
-                                                                        render={({ field }) => (
+                                                                        render={({field}) => (
                                                                             <FormItem>
                                                                                 <FormLabel>{t('fields.firstName')}</FormLabel>
                                                                                 <FormControl>
-                                                                                    <Input className="bg-background" placeholder={t('placeholders.firstName')} {...field} />
+                                                                                    <Input className="bg-background"
+                                                                                           placeholder={t('placeholders.firstName')} {...field}
+                                                                                           disabled={useMyInfo && index === 0}/>
                                                                                 </FormControl>
-                                                                                <FormMessage />
+                                                                                <FormMessage/>
                                                                             </FormItem>
                                                                         )}
                                                                     />
@@ -319,13 +368,15 @@ const AttendeeInfoForm = ({ eventId }: AttendeeInfoFormProps) => {
                                                                     <FormField
                                                                         control={form.control}
                                                                         name="lastName"
-                                                                        render={({ field }) => (
+                                                                        render={({field}) => (
                                                                             <FormItem>
                                                                                 <FormLabel>{t('fields.lastName')}</FormLabel>
                                                                                 <FormControl>
-                                                                                    <Input className="bg-background" placeholder={t('placeholders.lastName')} {...field} />
+                                                                                    <Input className="bg-background"
+                                                                                           placeholder={t('placeholders.lastName')} {...field}
+                                                                                           disabled={useMyInfo && index === 0}/>
                                                                                 </FormControl>
-                                                                                <FormMessage />
+                                                                                <FormMessage/>
                                                                             </FormItem>
                                                                         )}
                                                                     />
@@ -334,16 +385,20 @@ const AttendeeInfoForm = ({ eventId }: AttendeeInfoFormProps) => {
                                                                 <FormField
                                                                     control={form.control}
                                                                     name="email"
-                                                                    render={({ field }) => (
+                                                                    render={({field}) => (
                                                                         <FormItem>
                                                                             <FormLabel>{t('fields.email')}</FormLabel>
                                                                             <FormControl>
                                                                                 <div className="relative">
-                                                                                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                                                                                    <Input className="pl-12 bg-background" placeholder={t('placeholders.email')} {...field} />
+                                                                                    <Mail
+                                                                                        className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground"/>
+                                                                                    <Input
+                                                                                        className="pl-12 bg-background"
+                                                                                        placeholder={t('placeholders.email')} {...field}
+                                                                                        disabled={useMyInfo && index === 0}/>
                                                                                 </div>
                                                                             </FormControl>
-                                                                            <FormMessage />
+                                                                            <FormMessage/>
                                                                         </FormItem>
                                                                     )}
                                                                 />
@@ -375,7 +430,7 @@ const AttendeeInfoForm = ({ eventId }: AttendeeInfoFormProps) => {
                                                                             variant="outline"
                                                                             onClick={handlePrevious}
                                                                         >
-                                                                            <ArrowLeft className="w-4 h-4 mr-2" />
+                                                                            <ArrowLeft className="w-4 h-4 mr-2"/>
                                                                             {t('actions.previous')}
                                                                         </Button>
                                                                     )}
@@ -384,7 +439,7 @@ const AttendeeInfoForm = ({ eventId }: AttendeeInfoFormProps) => {
                                                                         {currentAttendeeIndex < attendees.length - 1
                                                                             ? t('actions.next')
                                                                             : t('actions.continue')}
-                                                                        <ArrowRight className="w-4 h-4 ml-2" />
+                                                                        <ArrowRight className="w-4 h-4 ml-2"/>
                                                                     </Button>
                                                                 </div>
                                                             </form>
@@ -403,14 +458,14 @@ const AttendeeInfoForm = ({ eventId }: AttendeeInfoFormProps) => {
                         <div className="mt-12 p-4 bg-green-50 dark:bg-green-950 border border-green-200 rounded-lg">
                             <div className="flex flex-col md:flex-row  gap-4 md:gap-0 items-center justify-between">
                                 <div className="flex items-center gap-2">
-                                    <Check className="w-5 h-5 text-green-600 dark:text-green-300" />
+                                    <Check className="w-5 h-5 text-green-600 dark:text-green-300"/>
                                     <p className="text-sm font-medium text-green-800 dark:text-green-300">
                                         {t('summary.complete')}
                                     </p>
                                 </div>
                                 <Button onClick={nextStep}>
                                     {t('actions.goToPayment')}
-                                    <ArrowRight className="w-4 h-4 ml-2" />
+                                    <ArrowRight className="w-4 h-4 ml-2"/>
                                 </Button>
                             </div>
                         </div>

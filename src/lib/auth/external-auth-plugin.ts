@@ -13,7 +13,7 @@ const externalSignInBodySchema = z.object({
     rememberMe: z.boolean().default(false),
 });
 const externalSignUpBodySchema = z.object({
-    email: z.string().email(),
+    email: z.email(),
     password: z.string().min(8),
     firstName: z.string().min(1),
     lastName: z.string().min(1),
@@ -120,7 +120,7 @@ export const externalAuthPlugin = <O extends BetterAuthOptions>() => {
                     token: string;
                     user: InferUser<O>;
                 }> => {
-                    const { email, password, firstName, lastName } = ctx.body;
+                    const {email, password, firstName, lastName} = ctx.body;
 
                     try {
                         // Call Backend API

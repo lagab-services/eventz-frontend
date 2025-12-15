@@ -114,15 +114,26 @@
       "additionalInfo": "Informations complémentaires"
     },
     "placeholders": {
-      "firstName": "Prénom",
-      "lastName": "Nom",
-      "email": "email@exemple.com"
+      "firstName": "Entrez le prénom...",
+      "lastName": "Entrez le nom...",
+      "email": "Entrez l'email..."
     },
     "actions": {
+      "signInToPrefill": "Connectez-vous pour pré-remplir vos informations",
+      "useMyInfo": "Utiliser mes informations ({name}, {email})",
       "previous": "Précédent",
       "next": "Suivant",
       "continue": "Continuer",
-      "goToPayment": "Continuer vers le paiement"
+      "goToPayment": "Continuer au paiement"
+    },
+    "validation": {
+      "firstName": "Le prénom doit comporter au moins 2 caractères.",
+      "lastName": "Le nom doit comporter au moins 2 caractères.",
+      "email": "Veuillez entrer une adresse email valide.",
+      "required": "{field} est requis."
+    },
+    "summary": {
+      "complete": "Tous les participants sont complétés. Vous pouvez passer au paiement."
     },
     "customerInfo": {
       "title": "Informations Acheteur",

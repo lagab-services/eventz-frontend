@@ -114,15 +114,26 @@
       "additionalInfo": "Additional Information"
     },
     "placeholders": {
-      "firstName": "First Name",
-      "lastName": "Last Name",
-      "email": "email@example.com"
+      "firstName": "Enter first name...",
+      "lastName": "Enter last name...",
+      "email": "Enter email..."
     },
     "actions": {
+      "signInToPrefill": "Sign in to pre-fill your information",
+      "useMyInfo": "Use my information ({name}, {email})",
       "previous": "Previous",
       "next": "Next",
       "continue": "Continue",
-      "goToPayment": "Proceed to Payment"
+      "goToPayment": "Go to payment"
+    },
+    "validation": {
+      "firstName": "First name must be at least 2 characters.",
+      "lastName": "Last name must be at least 2 characters.",
+      "email": "Please enter a valid email address.",
+      "required": "{field} is required."
+    },
+    "summary": {
+      "complete": "All attendees are completed. You can proceed to payment."
     },
     "customerInfo": {
       "title": "Buyer Information",
@@ -143,6 +154,10 @@
         "phone": {
           "label": "Phone",
           "placeholder": "06 12 34 56 78"
+        },
+        "terms": {
+          "label": "I accept the terms and conditions *",
+          "description": ""
         }
       },
       "buttons": {

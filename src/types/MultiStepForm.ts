@@ -25,10 +25,3 @@ export interface MultiStepFormContextProps<TFormValues> {
     goToStep: (step: number) => void;
     steps: StepsConfig<TFormValues>;
 }
-
-/*export interface MultiStepFormProps<TFormValues extends Record<string, any>> {
-    steps: FormStep<TFormValues>[];
-    schema: z.ZodType<TFormValues>;
-    onSubmit: (data: TFormValues) => void | Promise<void>;
-    storageKey?: string;
-}*/

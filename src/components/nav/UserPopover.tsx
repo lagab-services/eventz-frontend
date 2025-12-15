@@ -13,7 +13,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {BadgeCheck, CircleUserRound, LayoutDashboard, LogOut, Ticket} from "lucide-react";
+import {BadgeCheck, LayoutDashboard, LogOut, Ticket, UserRound} from "lucide-react";
 import Link from "next/link";
 import {authClient} from "@/lib/auth/auth-client";
 
@@ -29,7 +29,7 @@ const UserPopover = ({user}: UserPopoverProps) => {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <CircleUserRound size={20} className="rounded-full cursor-pointer"/>
+                <UserRound size={20} className="rounded-full cursor-pointer"/>
             </DropdownMenuTrigger>
             <DropdownMenuContent
                 className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
@@ -70,7 +70,6 @@ const UserPopover = ({user}: UserPopoverProps) => {
                         </DropdownMenuItem>
                     </Link>
                 </DropdownMenuGroup>
-                <DropdownMenuSeparator/>
                 <DropdownMenuItem onClick={async () => {
                     await authClient.signOut({
                         fetchOptions: {

@@ -9,7 +9,7 @@ export const auth = betterAuth({
     session: {
         cookieCache: {
             enabled: true,
-            maxAge: 24 * 60 * 60, // 24 hours cache duration
+            maxAge: 60 * 60, // 1 hour cache duration
             strategy: "jwt", // can be "jwt" or "compact"
             refreshCache: true, // Enable stateless refresh
         },

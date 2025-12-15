@@ -28,7 +28,7 @@ interface CartWrapperProps {
     sessionId: string;
 }
 
-const CartWrapper = ({cart,sessionId}: CartWrapperProps) => {
+const CartWrapper = ({cart, sessionId}: CartWrapperProps) => {
     const {
         currentStep,
         completedSteps,
@@ -40,7 +40,7 @@ const CartWrapper = ({cart,sessionId}: CartWrapperProps) => {
         setSessionId
     } = useCheckoutStore();
     let eventId: number;
-    const [eventLink,setEventLink]= useState<string>("#");
+    const [eventLink, setEventLink] = useState<string>("#");
     const {setCart} = useCartStore();
     const t = useTranslations('checkout');
 
@@ -50,7 +50,7 @@ const CartWrapper = ({cart,sessionId}: CartWrapperProps) => {
             setSessionId(sessionId);
             if (cart.items && cart.items.length > 0) {
                 eventId = cart.items[0].eventId;
-                setEventLink(formatEventUrl(cart.items[0].eventTitle,eventId));
+                setEventLink(formatEventUrl(cart.items[0].eventTitle, eventId));
                 await fetchCustomFields(eventId);
 
                 // Initialize attendees only if empty or count doesn't match
@@ -72,14 +72,14 @@ const CartWrapper = ({cart,sessionId}: CartWrapperProps) => {
     const renderStep = useCallback((step: string) => {
         switch (step) {
             case 'tickets':
-                return <AttendeeInfoForm eventId={eventId}/>;
+                return <AttendeeInfoForm/>;
             case 'info':
                 return <CustomerInfoForm/>;
             case 'payment':
                 return <RecapForm/>;
             case 'confirmation':
                 return <div className="flex flex-col items-center space-y-4 py-12">
-                    <Loader2 className="w-16 h-16  animate-spin" />
+                    <Loader2 className="w-16 h-16  animate-spin"/>
                     <h2 className="text-2xl font-semibold">
                         {t('redirect_in_progress')}
                     </h2>
@@ -122,7 +122,8 @@ const CartWrapper = ({cart,sessionId}: CartWrapperProps) => {
             <section className=" w-full md:w-1/2 h-full flex justify-end">
 
                 <div className="flex justify-between flex-col max-w-[1280px] w-full md:w-[80%] ">
-                    <Link href={eventLink} className="pt-6 mb-6 md:pt-0"><Button variant="link"><ArrowLeft />{t('backToEvent')}</Button></Link>
+                    <Link href={eventLink} className="pt-6 mb-6 md:pt-0"><Button
+                        variant="link"><ArrowLeft/>{t('backToEvent')}</Button></Link>
                     <Card className="sticky top-6 border-0 shadow-none w-full py-6 pt-0  pb-0 md:py-6">
                         <CardContent>
                             <Stepper

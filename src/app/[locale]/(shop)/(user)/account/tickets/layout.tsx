@@ -7,12 +7,12 @@ const TicketsLayout = ({children}: { children: ReactNode }) => {
         {
             name: 'Upcoming',
             value: 'upcoming',
-            url : 'account/tickets/',
+            url: 'account/tickets/',
         },
         {
             name: 'Past',
             value: 'past',
-            url : 'account/tickets/past',
+            url: 'account/tickets/past',
         }
     ];
 
@@ -25,7 +25,7 @@ const TicketsLayout = ({children}: { children: ReactNode }) => {
                         <TabsTrigger
                             key={tab.value}
                             value={tab.value}
-                            className='data-[state=active]:bg-transparent data-[state=active]:border-primary dark:data-[state=active]:border-primary h-full rounded-none border-0 border-b-2 border-transparent data-[state=active]:shadow-none flex-none'
+                            className='data-[state=active]:bg-transparent! data-[state=active]:border-primary dark:data-[state=active]:border-primary h-full rounded-none border-0 border-b-2 border-transparent data-[state=active]:shadow-none flex-none'
                         >
                             <Link href={`/${tab.url}`}>{tab.name}</Link>
                         </TabsTrigger>
